@@ -20,7 +20,7 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 
 
 <div align="center">
-  <img src="Images/Img_1.3.png" alt="Robotický manipulátor" width="200">
+  <img src="images/img_1.3.png" alt="Robotický manipulátor" width="200">
   <br>
   <i>obr. 1.1 - Robotický manipulátor</i>
 </div>
@@ -28,7 +28,7 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 
 
 <div align="center">
-  <img src="Images/Img_1.2.png" alt="CAD model robotického manipulátoru" width="300">
+  <img src="images/img_1.2.png" alt="CAD model robotického manipulátoru" width="300">
   <br>
   <i>obr. 1.2 - CAD model robotického manipulátoru"</i>
 </div>

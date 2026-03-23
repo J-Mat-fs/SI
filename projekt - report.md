@@ -20,7 +20,7 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 
 
 <div align="center">
-  <img src="images/img_1.3.png" alt="Robotický manipulátor" width="200">
+  <img src="images/img_1.3.png" alt="Robotický manipulátor" width="280">
   <br>
   <i>obr. 1.1 - Robotický manipulátor</i>
 </div>
@@ -28,7 +28,7 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 
 
 <div align="center">
-  <img src="images/img_1.2.png" alt="CAD model robotického manipulátoru" width="300">
+  <img src="images/img_1.2.png" alt="CAD model robotického manipulátoru" width="400">
   <br>
   <i>obr. 1.2 - CAD model robotického manipulátoru</i>
 </div>
@@ -58,30 +58,11 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 ### Plán ověření
 "Úspěchem nazveme stav, kdy dojde k autonomnímu vykonání 30 cycklů bez chyby úchopu a v případě otevření klece dojde k zastavení manipulátoru do 500 ms."
 
-
-```mermaid
-C4Context
-    title Kontextový diagram - Řídicí systém Gantry robota
-    
-    Person(operator, "Operátor", "Spouští cykly a monitoruje stav přes HMI.")
-    Person(technician, "Servisní technik", "Provádí kalibraci os a diagnostiku chyb.")
-
-    System_Boundary(c1, "Gantry Robot System") {
-        System(control_system, "Řídicí SW (ROS2)", "Zajišťuje plánování trajektorií, logiku úchopu a bezpečnostní stavy.")
-    }
-
-    System_Ext(ros_net, "ROS2 Network / Nadřazený systém", "Posílá instrukce k manipulaci (receptury) a synchronizuje linku.")
-    System_Ext(hardware, "Pohony a Senzory (X,Y,Z)", "Fyzické motory os a vakuový senzor gripperu.")
-    System_Ext(safety_circ, "Bezpečnostní okruh", "Hardwarový E-Stop a zámky klece.")
-
-  
-    Rel(technician, control_system, "Kalibruje a servisuje", "CLI / Logy")
-    Rel(operator, control_system, "Ovládá a monitoruje", "GUI / HMI")
-    Rel(ros_net, control_system, "Posílá úlohy", "ROS2 Topics/Services")
-    Rel(control_system, hardware, "Posílá příkazy pohybu a čte polohu", "EtherCAT / CAN / USB")
-    Rel(safety_circ, control_system, "Vynucuje stop-stav", "HW Signal")
-```
-
+<div align="center">
+  <img src="images/img_1.4.png" alt="Kontextový diagram" width="680">
+  <br>
+  <i>obr. 1.3 - Kontextový diagram</i>
+</div>
 
 ### Seznam podnětů z okolí 
 

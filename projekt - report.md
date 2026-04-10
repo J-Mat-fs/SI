@@ -7,6 +7,7 @@ Předmět: Softwarové inženýrství
 Akademický rok 2025/2026
 
 Vedoucí předmětu: Ing. Pavel Steinbauer, Ph.D. a Ing. Jan Pelikán, Ph.D.
+----------------------------------------------------
 
 
 ## 1.1.Vision and Scope
@@ -43,11 +44,13 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
   
 ### Klíčové scénáře
 
-1. **Inicializace a homing** - robot zaručeně a bezpečně najde referenční polohy všech 3 os
-2. **Pick and place cyklus** - přesun materiálu ze zásobníku do konkrétního slotu v chemické lázni
-3. **Výměna lázně** - přesun robota do bezpečné polohy umožňující servis lázní
-4. **Krizové zastavení** - Okamžité zastavení motorů při narušení pracovního prostoru nebo stistku STOP tlačítka
-5. **Detekce chyby úchopu** - rozpoznání nesprávného úchopu výrobního materiálu a přerušení cyklu
+
+1. **Homing** - Synchronizace fyzické polohy motorů s logickým nulovým bodem softwaru pro definování souřadného systému.
+2. **Pohyb na souřadnice (Point-to-Point)** - Přesun Tool Center Pointu (TCP) na kokntréntí zadané souřadnice (X,Y,Z) v rámci pracovního prostoru
+3. **Úchop desky** - Sestup osy Z k polotovaru, aktivace gripperu a ověření dosažení úchopu skrz koncový spínač
+4. **Uvolnění desky** - Přesné uložení desky do slotu a uvolnění úchopu gripperu
+5. **Nouzové brzdění** - Prioritní přerušení všech probíhajícíh pohybů a odpojení výkonu pohonů při detekci narušení bezpečnosti
+6. **Monitoring stavu** - Periodické odesílání informací o aktuální poloze, rychlosti do nadřazeného systému 
 
 
 ### Odhad rizik
@@ -81,17 +84,16 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 - **Systémový administrátor** - IT role - Správa síťové infrastruktury a verzování řídícího software
   
 ### Základní omezení
-Technické i legislativní omezení:
 
-- **Hardware** - Tří osá kontruskce s pohonem přes krokové motory, odolný gripper vůči chemické korozi 
+Technické i legislativní omezení:
   
-- **Rozhraní** - Komunikace mezi moduly probíhá přes standarty ROS2
+- **Komunikační standardy** - Komunikace mezi moduly probíhá přes standardy ROS2 zpráv
   
-- **Standardy a normy** - Systém musí splňovat normy **ISO 10218** - průmyslové roboty - bezpečnost a směrnice pro práci v chemickém prostředí
-  
-- **Bezpečností limity** - Maximální rychlost pohybu v blízkosti okraje lázní omezena na 200 mm/s, zároveň okamžíté zastavení při detekci vniknutí do klece
+- **Software safety** - V případě výpadku komunikace nebo překročení mezních hodnot (překročení rychlosti nad xxx mm/s) software autonomně vyvolá stop stav bez zásahu nadřazené sítě.
   
 - **Reálný čas** - Řídící smyčka pro plánování trajektorie běží s pevnou periodou pro zaručení stability pohybu 
+  
+- **Legislativní normy** - Návrh SW architektury musí odpovídat požadavkům normy ISO 10218 na spolehlivost logických bezpečnostních funkcí. Kód musí být verzován (Git) a dokumentován pro potřeby budoucí certifikace.
 
 
 ### Plán práce týmu a rozdělení rolí
@@ -107,17 +109,24 @@ Technické i legislativní omezení:
 
 ## 1.2. Requirements Specification
 
-Cílem je definování systému tak, aby byl jednoznačný a testovatelný
+Cílem je definování systému tak, aby byl jednoznačný, testovatelný a zaměřený na softwarové řízení 3-osého manipulátoru.
 
 ### Usecase model
-Popis interakce mezi aktéry a systémem pro manipulaci s polotovarem
+Model se zaměřuje na elementární (atomické) operace systému, ze kterých se skládají komplexní procesy.
 
-**Pick and Place cyklus**
+**Seznam elementárních případů užití:**
 
-- *Hlavní scénář* -  Pick and place
-- *Alternativní tok* - Robot čeká, dokud není v zásobníku nová destička
-- *Chybová tok* - Detekce neuchopeného polotovaru, přerušení hlavního toku
+  - **UC_01**: Inicializace (Homing) – kalibrace os.
 
+- **UC_02**: Pohyb na souřadnice – nízkoúrovňové řízení trajektorie.
+
+- **UC_03**: Úchop polotovaru (Pick) – aktivace a kontrola vakua.
+
+- **UC_04**: Uvolnění polotovaru (Place) – deaktivace vakua a potvrzení.
+
+- **UC_05**: Nouzové zastavení – prioritní přerušení SW smyčky.
+
+ 
 <div align="center">
   <img src="images/img_1.5.png" alt="Usecase diagram" width="680">
   <br>
@@ -128,18 +137,18 @@ Popis interakce mezi aktéry a systémem pro manipulaci s polotovarem
 
 
 #### Seznam požadavků (FR & NFR)
-| ID | Požadavek | Priorita | Zdroj | Verifikace |
-| :--- | :--- | :--- | :--- |:--- |
-| **FR-01** | Systém musí umožnit automatickou kalibraci všech 3 os (Homing) | Vysoká | Servisní technik | Test |
-| **FR-02** | Robot musí provést kompletní manipulační cyklus na základě souřadnic z ROS2. | Vysoká | Provozní scénář | Demonstrace|
-| **FR-03** | Systém musí detekovat úspěšný úchop destičky pomocí koncového senzoru | Vysoká |Provozní scénář| Test |
-| **FR-04** | Systém musí umožnit posuv os v servisním režimu | Nízka |Servisní technik| Test |
-| **FR-05** | Systémově implementované softwarově mechanické limity | Vysoká | Bezpečnostní technik | Test |
-| **FR-06** | Ukládání systémových dat o dokončených cyklech, chybových hlášení a stavu senzorů do logu a odesílat přes ROS2 v realtimu | Střední | Záznám výsledků | Analýza logu |
-| **NFR-01** | Systém musí přejít do bezpečného stop-stavu při detekci poruchy/červeného tlačítka  do 500 ms (Failsafe). | Kritická | Bezpečnostní technik | Měření |
-| **NFR-02** | Odolnost senzorů proti korozivním výparům  | Střední | Provozní prostředí  | Inspekce|
-| **NFR-03** | Provozuschopnost systému víc než 95 % plánované výrobní doby  | Vysoká | Koordnitánor výroby | Analýza logu |
-| **NFR-04** | Síťová komunikace ROS2 izolována od veřejné sítě a ochráněna od neoprávných příkazů | Vysoká | Vývojář | Inspekce sítě |
+| ID | Požadavek | Priorita | Zdroj | Verifikace | Evidence |
+| :--- | :--- | :--- | :--- |:--- | :--- |
+| **FR-01** | Systém musí umožnit automatickou kalibraci všech 3 os (Homing) | Vysoká | Servisní technik | Test | Konzole ROS2 (zpráva)
+| **FR-02** | Pohyb (P2P): Systém musí umožnit přesun TCP na definované souřadnice X, Y, Z s přesností $\pm$ 0.1 mm. |Vysoká | Provozní scénář | Demonstrace| Porovnání cílových a aktuálních souřadnic
+| **FR-03** | Systém musí aktivovat a  detekovat úspěšný úchop destičky pomocí koncového senzoru | Vysoká |Provozní scénář| Test | Změna v provozním logu u gripper_status
+| **FR-04** | Systém musí deaktivovat gripper a potvrdit uvolnění gripperu před odjezdem osy Z. | Vysoká |Provozní scénář| Test | Log událostí a následná změna Z souřadnic
+| **FR-05** | Systém musí umožnit posuv os v servisním režimu | Nízka |Servisní technik| Test | Záznam o přijetí příkazu z ovladače (panel)
+| **FR-06** | Systémově implementované softwarově mechanické limity | Vysoká | Bezpečnostní technik | Test | Chybová hláška v terminálu při pohybu mimo rozsah
+| **FR-07** | Ukládání systémových dat o dokončených cyklech, chybových hlášení a stavu senzorů do logu a odesílat přes ROS2 v realtimu | Střední | Záznám výsledků | Analýza logu | soubor .log na disku s historií dat
+| **NFR-01** | Systém musí přejít do bezpečného stop-stavu při detekci poruchy/červeného tlačítka   do 500 ms (Failsafe). | Kritická | Bezpečnostní technik | Měření | Časový rozdíl v logu mezi chybou a zastavením motoru
+| **NFR-02** | Provozuschopnost systému víc než 95 % plánované výrobní doby  | Vysoká | Koordnitánor výroby | Analýza logu |Report z diagnostického modulu
+| **NFR-03** | Síťová komunikace ROS2 izolována od veřejné sítě a ochráněna od neoprávných příkazů | Vysoká | Vývojář | Inspekce sítě | Konfigurační soubor firewallu
 
 
 **Požadavky na rozhraní**
@@ -158,12 +167,6 @@ Popis interakce mezi aktéry a systémem pro manipulaci s polotovarem
 **Akceptační kritéria rozhraní**
 
 
-||Úspěšný manipulační cyklus - navázáno na FR-02|
-| :--- | :--- | 
-| **Given** | Robot ve stavu ready, polotovar v zásovníku a systém přijal souřadnice cílového slotu přes ROS2
-| **When** | Nadřazený systém odešle příkaz ke spuštění cyklu
-| **Then** | Robot proveje nájezd, úchop polotovaru, přesun do slotu lázně, uvolnění úchopu a návrat do poč. polohy
-
 
 ||Detekce neúspěšného úchopu - navázáno na FR-03|
 | :--- | :--- | 
@@ -176,6 +179,7 @@ Popis interakce mezi aktéry a systémem pro manipulaci s polotovarem
 | **Given** | Robot provádí pohyb v libovolné ose
 | **When** | Dojde k rozpojení bezpečnostního okruhu (tlačítko, otevření klece)
 | **Then** | Systém odpojí pohony a veškerý pohyb se zastaví do 500 ms 
+
 
 
 

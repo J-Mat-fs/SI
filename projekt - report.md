@@ -185,6 +185,29 @@ Model se zaměřuje na elementární (atomické) operace systému, ze kterých s
 
 ## 1.3. Model system
 
+**Doménový model**
+
+Tento model definuje, jaká data a objekty v systému existují a jak spolu souvisí. V našem případě jde o softwarovou reprezentaci robota.
+
+<div align="center">
+  <img src="images/img_1.6.png" alt="Doménový model" width="730">
+  <br>
+  <i>obr. 1.5 - Doménový model</i>
+</div>
+
+**Dynamický model: Stavový autommat**
+Model definující v jakém stavu se software nachází a co ho nutí stav měnit.
+
+Na zákaldě požadavků, digram vypadá
+
+<div align="center">
+  <img src="images/img_1.7.png" alt="Doménový model" width="700">
+  <br>
+  <i>obr. 1.7 - Dynamický model </i>
+</div>
+
+** Procesní model - Data Flow Diagram**
+Vytvořen pro klíčová proces - Úchop polotovaru
 
 ## 1.4. Verification and Validation 
 

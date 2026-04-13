@@ -185,9 +185,11 @@ Model se zaměřuje na elementární (atomické) operace systému, ze kterých s
 
 ## 1.3. Model system
 
+Specifikujeme vnitřní strukturu a dynamické chování řídícího systému pro Gantry robot. Modely definují rozhraní mezi jednotlivámi softwarowými moduly a jejich interakci s okolím.
+
 **Doménový model**
 
-Tento model definuje, jaká data a objekty v systému existují a jak spolu souvisí. V našem případě jde o softwarovou reprezentaci robota.
+Doménovým modelem reprezentujeme vztahy mezi klíčovými objekty v problémové doméně. Kde systém je rozdělen na logické třídy, vztahy a datové entity.
 
 <div align="center">
   <img src="images/img_1.6.png" alt="Doménový model" width="730">
@@ -195,20 +197,96 @@ Tento model definuje, jaká data a objekty v systému existují a jak spolu souv
   <i>obr. 1.5 - Doménový model</i>
 </div>
 
-**Dynamický model: Stavový autommat**
-Model definující v jakém stavu se software nachází a co ho nutí stav měnit.
+<br>
 
-Na zákaldě požadavků, digram vypadá
+**Dynamický model: Stavový automat**
+
+Stavový automat definuje deterministické chování robota. Zajišťuje, že systém reaguje na podněty pouze v logických stavech.
+
+Klíčovým prvkem je stav Fault, do kterého systém přechází při jakékoli anomálii. Dále systémové chování popisují přechody mezi pracovními stavy, kde každý přechod je hlídán logickou podmínkou.
 
 <div align="center">
   <img src="images/img_1.7.png" alt="Doménový model" width="700">
   <br>
-  <i>obr. 1.7 - Dynamický model </i>
+  <i>obr. 1.6 - Dynamický model </i>
 </div>
 
-** Procesní model - Data Flow Diagram**
+<br>
+
+**Procesní model - Data Flow Diagram**
 Vytvořen pro klíčová proces - Úchop polotovaru
 
-## 1.4. Verification and Validation 
+<div align="center">
+  <img src="images/img_1.8.png" alt="Data Flow Diagram" width="700">
+  <br>
+  <i>obr. 1.7 - Data Flow Diagram </i>
+</div>
+
+**Model rozhraní a nasazení**
+
+Model popisující fyzické a logické rozmístění softwarových komponent na hadrwarových uzlech. Rozdělení na vnitřní podstruktury systému a vnější entity jako například "Factory Control Server", se kterým systém komunikuje.
+
+<div align="center">
+  <img src="images/img_1.9.png" alt="Model rozhraní a nasazení" width="700">
+  <br>
+  <i>obr. 1.8 - Model rozhraní a nasazení</i>
+</div>
+
+
+## 1.4. Verification and Validation
+
+**V&V Matice - Traceability**
+
+Pro vybrané požadavky z kapitoly 1.2
+
+| ID | Požadavek | Metoda ověření | Specifikace ověření | Test Case ID |
+| :--- | :--- | :--- | :--- | :--- |
+|FR-01 | Homing | Zátěžový test | 10x po sobě jdoucí úspěšná kalibrace z náhodných počátečních poloh os | TC-01
+FR-02 | Přesnost pohybu | Měření | Najetí na 3 náhodné body v 5 opakováních, výpočet odchylky | TC-02
+|FR-03| Úchop | Test | 20 cyklů úchopu a zdvihu bez pádu polotovaru nebo falešné detekce uchopení | TC-03
+|FR-06| Soft Limity | Negativní test | 5 pokusů o zadání souřadníc mimo pracovní prostor přes ROS2 | TC-04
+|NFR-01| Stop stav | Časová analýza | 10x simulace chyby, změření času od logu události po zastavení příkazu motorů | TC-05
+|NFR-02|   Uptime - 95 % | Test | 24hodinový běh v simulovaném stress-test cyklu |  TC-06
+
+<br>
+
+**Testovací strategie po úrovních**
+
+Pro omezení škod způsobené neodlaněným spouštěného softwaru přistoupíme k testingu víceúrovňovou simulací, ve které budeme postupně zvyšovat množinu celku robota.
+
+1. Unit Testing - Testování jednotlivých funkcí (výpočet inverzní kinematiky, parsování ROS2 zpráv) bez nutnosti připojeného HW
+   
+2. Software in the Loop - Testování kompletního kódu v simulovaném prostředí (například Gazebo), kde pozorujeme chování robota v bezpečném prostředí.
+3. Hardware in the Loop - Řídící algoritmus běží na Master PC, ale je připojem k realným driverům motorů bez mechanické zátěže pro otestování komunikace.
+4. System Inert Fluid Testing - První testování stroje v prostředí lázní plněné inertní kapalinou (vodou)
+5. System Stress Testing - Vědomé přetězování softwarové logiky v bezpečném prostředí (bez chemie) 
+6. System Endtesting  - Finální testování kompletního stroje v chemickém provozu 
+
+
+**Test Cases**
+
+
+| ID | Název testu | Vstupní podmínka | Očekávaný výsledek | Pass/Fail kritérium |
+| :--- | :--- | :--- | :--- | :--- |
+|TC-01 | Homing Sequence | 10x - Start systému, osy v náhodných polohách | Robot najde 3 koncové spínače a vynuluje souřadnice | isHomed == True a rozptyl nalezených nulových bodů <0,05 mm| 
+|TC-02 | P2P Accuracy | 5x - Příkaz pohybu na bod1, bod2, bod3  | Robot se zastaví na pozici | Max. odchylka mezi cílovou a skutečnou polohou v každém kroku <0.1 mm|
+|TC-03a| Pick Succes | Polotovar v zásobníku, příkaz Pick | Koncový senzor sepne a změní stav na Gripped | is_polotovar_uchopen = True |
+|TC-03b| Pic Failure (empty) | Zásobník prázdný, příkaz Pick | Po 2s timeoutu, systím nahlásí chybu a přejede do bezpečné polohy | Stav - Fault, zprává ROS2 operátorovi |
+|TC-04| Soft Limit Breach | Pokus o pohyb na "přeslimitní" souřadnice| Software odmítne vykonat pohyb dřív, než se motory pohnou| Chybová hláška v konzoli|
+|TC-05| Emergency Stop| Stisk E-stop tlačítka během pohybu | Okamžité zastavení všech os do 500 ms| Časový rozdíl v logu t<500 ms |
+|TC-06| 24 hod - Zátěžový Test| Skript s nekonečnou frontou náhodných, validních souřadnic v pracovním prostoru | Systém vykoná cykly bez pádu uzlů nebo kritického nárustu spotřeby | Systém běží minimálně 95 % testovaného času bez nutnosti restartu softwaru v simulovaném prostředí - SIF |
+
+
+
+
+**Plán záznamu výsledků**
+
+Pro splnění požadavků na evidenci, použijeme tyto nástroje:
+
+ - ROS Bags - Záznam všech dat protékajících systémem (témata, zprávy, časy)
+ - System Logs - Textové záznamy o stavových přechodech
+ - Telemetry values - CSV exporty z dashbordu pro porovnání přesnosti pohybu
+ - Screenshots - Snímky z RViz vizualizace pro potvrzení shody modelu s realitou.
+
 
 ## 1.5. Prototype

@@ -7,13 +7,19 @@ Předmět: Softwarové inženýrství
 Akademický rok 2025/2026
 
 Vedoucí předmětu: Ing. Pavel Steinbauer, Ph.D. a Ing. Jan Pelikán, Ph.D.
-----------------------------------------------------
+
+<div align="center">
+  <hr>
+</div>
 
 
 ## 1.1.Vision and Scope
 
+<div align="center">
+  <hr>
+</div>
 
-  ### Vision
+### Vision
 
 <div align="justify">
 Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipulátor typu Gantry, který automatizuje manipulaci s výrobním materiálem v prostředí poloautonomní výrobní linky. Systém zajistí nepřetržitost výroby, vysokou opakovatelnost a eliminaci rizika práce s agresivní chemií. 
@@ -21,15 +27,16 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 
 
 <div align="center">
-  <img src="images/img_1.3.png" alt="Robotický manipulátor" width="280">
+  <img src="images/img_1.3.png" alt="Robotický manipulátor" width="230">
   <br>
   <i>obr. 1.1 - Robotický manipulátor</i>
 </div>
 
+<br>
 
 
 <div align="center">
-  <img src="images/img_1.2.png" alt="CAD model robotického manipulátoru" width="400">
+  <img src="images/img_1.2.png" alt="CAD model robotického manipulátoru" width="520">
   <br>
   <i>obr. 1.2 - CAD model robotického manipulátoru</i>
 </div>
@@ -60,6 +67,8 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 
 ### Plán ověření
 "Úspěchem nazveme stav, kdy dojde k autonomnímu vykonání 30 cycklů bez chyby úchopu a v případě otevření klece dojde k zastavení manipulátoru do 500 ms."
+
+<div style="page-break-after: always;"></div>
 
 ### Kontextový diagram
 <div align="center">
@@ -97,6 +106,9 @@ Technické i legislativní omezení:
 
 
 ### Plán práce týmu a rozdělení rolí
+
+<div align="center">
+
 | Fáze projektu | Odpovědná role | Výstup (Artefakt) |
 | :--- | :--- | :--- |
 | **Analýza a vize** | Systémový architekt | Vision & Scope dokumentace, C4 diagram |
@@ -105,9 +117,21 @@ Technické i legislativní omezení:
 | **Ověřování a testy** | V&V Specialista | Testovací případy, V&V matice |
 | **Prototypování** | Vývojář | ROS2 simulace, kód klíčové funkce |
 
+<br>
+<i>tab. 1.1 - Rozdělení rolí v týmu</i>
+</div>
 
+<br>
+
+<div align="center">
+  <hr>
+</div>
 
 ## 1.2. Requirements Specification
+
+<div align="center">
+  <hr>
+</div>
 
 Cílem je definování systému tak, aby byl jednoznačný, testovatelný a zaměřený na softwarové řízení 3-osého manipulátoru.
 
@@ -116,15 +140,21 @@ Model se zaměřuje na elementární (atomické) operace systému, ze kterých s
 
 **Seznam elementárních případů užití:**
 
-  - **UC_01**: Inicializace (Homing) – kalibrace os.
+  - **UC_01**: Inicializace (Homing) – kalibrace os
 
 - **UC_02**: Pohyb na souřadnice – nízkoúrovňové řízení trajektorie.
 
-- **UC_03**: Úchop polotovaru (Pick) – aktivace a kontrola vakua.
+- **UC_03**: Úchop polotovaru (Pick) – aktivace a kontrola gripperu
 
-- **UC_04**: Uvolnění polotovaru (Place) – deaktivace vakua a potvrzení.
+- **UC_04**: Uvolnění polotovaru (Place) – deaktivace gripperu a potvrzení.
 
 - **UC_05**: Nouzové zastavení – prioritní přerušení SW smyčky.
+
+další operace systému, které už nejsou součástí diagramu:
+
+-  **UC_06**: Ověření dosažitelnosti souřadnic - ověření správnost zadaných souřadnic v porovnání s pracovním prostorem
+
+-  **UC_07**: Odeslání dat do databáze - log informace o průběhu stavů v robotu
 
  
 <div align="center">
@@ -134,21 +164,27 @@ Model se zaměřuje na elementární (atomické) operace systému, ze kterých s
 </div>
 
 
-
-
 #### Seznam požadavků (FR & NFR)
+
+<div align="center">
+
 | ID | Požadavek | Priorita | Zdroj | Verifikace | Evidence |
 | :--- | :--- | :--- | :--- |:--- | :--- |
 | **FR-01** | Systém musí umožnit automatickou kalibraci všech 3 os (Homing) | Vysoká | Servisní technik | Test | Konzole ROS2 (zpráva)
-| **FR-02** | Pohyb (P2P): Systém musí umožnit přesun TCP na definované souřadnice X, Y, Z s přesností $\pm$ 0.1 mm. |Vysoká | Provozní scénář | Demonstrace| Porovnání cílových a aktuálních souřadnic
+| **FR-02** | Pohyb (P2P): Systém musí umožnit přesun TCP na definované souřadnice X, Y, Z s přesností ± 0.1 mm. |Vysoká | Provozní scénář | Demonstrace| Porovnání cílových a aktuálních souřadnic
 | **FR-03** | Systém musí aktivovat a  detekovat úspěšný úchop destičky pomocí koncového senzoru | Vysoká |Provozní scénář| Test | Změna v provozním logu u gripper_status
-| **FR-04** | Systém musí deaktivovat gripper a potvrdit uvolnění gripperu před odjezdem osy Z. | Vysoká |Provozní scénář| Test | Log událostí a následná změna Z souřadnic
+| **FR-04** | Systém deaktivuje gripper a potvrdí uvolnění gripperu před odjezdem osy Z | Vysoká |Provozní scénář| Test | Log událostí a následná změna Z souřadnic
 | **FR-05** | Systém musí umožnit posuv os v servisním režimu | Nízka |Servisní technik| Test | Záznam o přijetí příkazu z ovladače (panel)
 | **FR-06** | Systémově implementované softwarově mechanické limity | Vysoká | Bezpečnostní technik | Test | Chybová hláška v terminálu při pohybu mimo rozsah
 | **FR-07** | Ukládání systémových dat o dokončených cyklech, chybových hlášení a stavu senzorů do logu a odesílat přes ROS2 v realtimu | Střední | Záznám výsledků | Analýza logu | soubor .log na disku s historií dat
 | **NFR-01** | Systém musí přejít do bezpečného stop-stavu při detekci poruchy/červeného tlačítka   do 500 ms (Failsafe). | Kritická | Bezpečnostní technik | Měření | Časový rozdíl v logu mezi chybou a zastavením motoru
 | **NFR-02** | Provozuschopnost systému víc než 95 % plánované výrobní doby  | Vysoká | Koordnitánor výroby | Analýza logu |Report z diagnostického modulu
 | **NFR-03** | Síťová komunikace ROS2 izolována od veřejné sítě a ochráněna od neoprávných příkazů | Vysoká | Vývojář | Inspekce sítě | Konfigurační soubor firewallu
+
+<br>
+<i>tab. 1.2 - Tabulka se seznamem požadavků (FR & NFR)</i>
+</div>
+<br>
 
 
 **Požadavky na rozhraní**
@@ -164,26 +200,44 @@ Model se zaměřuje na elementární (atomické) operace systému, ze kterých s
 - **Emergency STOP** - Fyzické odpojení napájení motorů při narušení klece
 
 
-**Akceptační kritéria rozhraní**
 
 
+#### Akceptační kritéria rozhraní
+
+<div align = "center">
 
 ||Detekce neúspěšného úchopu - navázáno na FR-03|
 | :--- | :--- | 
 | **Given** | Robot se nachází na zásobníkem a spustil uchopovací cyklus
 | **When** | Koncový senzor nahlásí zmáčknutí koncového spínače indikující chybějící polotovar
-| **Then** | Robot přeruší cyklus, zvedne osu Z do bezpečné výšky a aktivuje alarm
+| **Then** | Robot přeruší cyklus, zvedne osu Z do bezpečné výšky a aktivuje alarm |
+
+<br>
+<i>tab. 1.3 - Akceptační kritéria rozhraní pro FR-03 </i>
+<br>
+<br>
 
 ||Reakce na nouzové zastavení - navázáno na NRF-01|
 | :--- | :--- | 
 | **Given** | Robot provádí pohyb v libovolné ose
 | **When** | Dojde k rozpojení bezpečnostního okruhu (tlačítko, otevření klece)
-| **Then** | Systém odpojí pohony a veškerý pohyb se zastaví do 500 ms 
+| **Then** | Systém odpojí pohony a veškerý pohyb se zastaví do 500 ms |
+
+<br>
+<i>tab. 1.4 - Akceptační kritéria rozhraní - pro NRF-01 </i>
+</div>
+<br>
 
 
-
+<div align="center">
+  <hr>
+</div>
 
 ## 1.3. Model system
+
+<div align="center">
+  <hr>
+</div>
 
 Specifikujeme vnitřní strukturu a dynamické chování řídícího systému pro Gantry robot. Modely definují rozhraní mezi jednotlivámi softwarowými moduly a jejich interakci s okolím.
 
@@ -197,7 +251,7 @@ Doménovým modelem reprezentujeme vztahy mezi klíčovými objekty v problémov
   <i>obr. 1.5 - Doménový model</i>
 </div>
 
-<br>
+<div style="page-break-after: always;"></div>
 
 **Dynamický model: Stavový automat**
 
@@ -205,22 +259,30 @@ Stavový automat definuje deterministické chování robota. Zajišťuje, že sy
 
 Klíčovým prvkem je stav Fault, do kterého systém přechází při jakékoli anomálii. Dále systémové chování popisují přechody mezi pracovními stavy, kde každý přechod je hlídán logickou podmínkou.
 
+<br>
+
 <div align="center">
   <img src="images/img_1.7.png" alt="Doménový model" width="700">
   <br>
   <i>obr. 1.6 - Dynamický model </i>
 </div>
 
-<br>
+
+
+<div style="page-break-after: always;"></div>
+
 
 **Procesní model - Data Flow Diagram**
-Vytvořen pro klíčová proces - Úchop polotovaru
+Vytvořen pro klíčový  proces - Úchop polotovaru
 
 <div align="center">
   <img src="images/img_1.8.png" alt="Data Flow Diagram" width="700">
   <br>
   <i>obr. 1.7 - Data Flow Diagram </i>
 </div>
+
+<div style="page-break-after: always;"></div>
+
 
 **Model rozhraní a nasazení**
 
@@ -232,12 +294,24 @@ Model popisující fyzické a logické rozmístění softwarových komponent na 
   <i>obr. 1.8 - Model rozhraní a nasazení</i>
 </div>
 
+<div style="page-break-after: always;"></div>
+
+
+<div align="center">
+  <hr>
+</div>
 
 ## 1.4. Verification and Validation
+
+<div align="center">
+  <hr>
+</div>
 
 **V&V Matice - Traceability**
 
 Pro vybrané požadavky z kapitoly 1.2
+
+<div align="center" >
 
 | ID | Požadavek | Metoda ověření | Specifikace ověření | Test Case ID |
 | :--- | :--- | :--- | :--- | :--- |
@@ -246,47 +320,66 @@ FR-02 | Přesnost pohybu | Měření | Najetí na 3 náhodné body v 5 opakován
 |FR-03| Úchop | Test | 20 cyklů úchopu a zdvihu bez pádu polotovaru nebo falešné detekce uchopení | TC-03
 |FR-06| Soft Limity | Negativní test | 5 pokusů o zadání souřadníc mimo pracovní prostor přes ROS2 | TC-04
 |NFR-01| Stop stav | Časová analýza | 10x simulace chyby, změření času od logu události po zastavení příkazu motorů | TC-05
-|NFR-02|   Uptime - 95 % | Test | 24hodinový běh v simulovaném stress-test cyklu |  TC-06
+|NFR-02|   Uptime 95 % | Test | 24hodinový běh v simulovaném stress-test cyklu |  TC-06
+
+<i>tab. 1.5 - V&V Matice - Traceability</i>
+</div>
 
 <br>
 
 **Testovací strategie po úrovních**
 
-Pro omezení škod způsobené neodlaněným spouštěného softwaru přistoupíme k testingu víceúrovňovou simulací, ve které budeme postupně zvyšovat množinu celku robota.
+Pro omezení fyzických škod způsobené chybami softwaru, přistoupíme k testingu pomocí víceúrovňové simulace, ve které postupně zvyšujeme množinu celku zapojení robota.
 
-1. Unit Testing - Testování jednotlivých funkcí (výpočet inverzní kinematiky, parsování ROS2 zpráv) bez nutnosti připojeného HW
+1. **Unit Testing** - Testování jednotlivých funkcí (výpočet inverzní kinematiky, parsování ROS2 zpráv) bez nutnosti připojeného HW
    
-2. Software in the Loop - Testování kompletního kódu v simulovaném prostředí (například Gazebo), kde pozorujeme chování robota v bezpečném prostředí.
-3. Hardware in the Loop - Řídící algoritmus běží na Master PC, ale je připojem k realným driverům motorů bez mechanické zátěže pro otestování komunikace.
-4. System Inert Fluid Testing - První testování stroje v prostředí lázní plněné inertní kapalinou (vodou)
-5. System Stress Testing - Vědomé přetězování softwarové logiky v bezpečném prostředí (bez chemie) 
-6. System Endtesting  - Finální testování kompletního stroje v chemickém provozu 
+2. **Software in the Loop** - Testování kompletního kódu v simulovaném prostředí (například Gazebo), kde pozorujeme chování robota ve virtuálním prostředí.
+3. **Hardware in the Loop** - Řídící algoritmus běží na Master PC, ale je připojem k realným driverům motorů bez mechanické zátěže pro otestování komunikace.
+4. **System Inert Fluid Testing** - První testování stroje v prostředí lázní plněné inertní kapalinou (vodou)
+5. **System Stress Testing** - Vědomé přetězování softwarové logiky v bezpečném prostředí (bez chemie) 
+6. **System Endtesting**  - Finální testování kompletního stroje v chemickém provozu 
 
+<div style="page-break-after: always;"></div>
 
-**Test Cases**
+**Test cases**
 
+<div align="center">
 
 | ID | Název testu | Vstupní podmínka | Očekávaný výsledek | Pass/Fail kritérium |
 | :--- | :--- | :--- | :--- | :--- |
-|TC-01 | Homing Sequence | 10x - Start systému, osy v náhodných polohách | Robot najde 3 koncové spínače a vynuluje souřadnice | isHomed == True a rozptyl nalezených nulových bodů <0,05 mm| 
-|TC-02 | P2P Accuracy | 5x - Příkaz pohybu na bod1, bod2, bod3  | Robot se zastaví na pozici | Max. odchylka mezi cílovou a skutečnou polohou v každém kroku <0.1 mm|
-|TC-03a| Pick Succes | Polotovar v zásobníku, příkaz Pick | Koncový senzor sepne a změní stav na Gripped | is_polotovar_uchopen = True |
-|TC-03b| Pic Failure (empty) | Zásobník prázdný, příkaz Pick | Po 2s timeoutu, systím nahlásí chybu a přejede do bezpečné polohy | Stav - Fault, zprává ROS2 operátorovi |
-|TC-04| Soft Limit Breach | Pokus o pohyb na "přeslimitní" souřadnice| Software odmítne vykonat pohyb dřív, než se motory pohnou| Chybová hláška v konzoli|
-|TC-05| Emergency Stop| Stisk E-stop tlačítka během pohybu | Okamžité zastavení všech os do 500 ms| Časový rozdíl v logu t<500 ms |
-|TC-06| 24 hod - Zátěžový Test| Skript s nekonečnou frontou náhodných, validních souřadnic v pracovním prostoru | Systém vykoná cykly bez pádu uzlů nebo kritického nárustu spotřeby | Systém běží minimálně 95 % testovaného času bez nutnosti restartu softwaru v simulovaném prostředí - SIF |
+|TC-01 | **Homing Sequence** | 10x - Start systému, osy v náhodných polohách | Robot najde 3 koncové spínače a vynuluje souřadnice | isHomed == True a rozptyl nalezených nulových bodů <0,05 mm| 
+|TC-02 | **P2P Accuracy** | 5x - Příkaz pohybu na bod1, bod2, bod3  | Robot se zastaví na pozici | Max. odchylka mezi cílovou a skutečnou polohou v každém kroku <0.1 mm|
+|TC-03a| **Pick Succes** | Polotovar v zásobníku, příkaz Pick | Koncový senzor sepne a změní stav na Gripped | is_gripped = True |
+|TC-03b| **Pic Failure (empty)** | Zásobník prázdný, příkaz Pick | Po 2s timeoutu, systém nahlásí chybu a přejede do bezpečné polohy | Stav - Fault, zprává ROS2 operátorovi |
+|TC-04| **Soft Limit Breach** | Pokus o pohyb na "přeslimitní" souřadnice| Software odmítne vykonat pohyb dřív, než se motory pohnou| Chybová hláška v konzoli|
+|TC-05| **Emergency Stop**| Stisk E-stop tlačítka během pohybu | Okamžité zastavení všech os do 500 ms| Časový rozdíl v logu t<500 ms |
+|TC-06| **24 hod - Zátěžový Test**| Skript s nekonečnou frontou náhodných, validních souřadnic v pracovním prostoru | Systém vykoná cykly bez pádu uzlů nebo kritického nárustu spotřeby | Systém běží minimálně 95 % testovaného času bez nutnosti restartu softwaru v simulovaném prostředí - SIF |
 
 
+<br>
+<i>tab. 1.6 - Tabulka Test Cases </i>
+</div>
+<br>
 
 
 **Plán záznamu výsledků**
 
 Pro splnění požadavků na evidenci, použijeme tyto nástroje:
 
- - ROS Bags - Záznam všech dat protékajících systémem (témata, zprávy, časy)
- - System Logs - Textové záznamy o stavových přechodech
- - Telemetry values - CSV exporty z dashbordu pro porovnání přesnosti pohybu
- - Screenshots - Snímky z RViz vizualizace pro potvrzení shody modelu s realitou.
+ - **ROS Bags** - Záznam všech dat protékajících systémem (témata, zprávy, časy)
+ - **System Logs** - Textové záznamy o stavových přechodech
+ - **Telemetry values** - CSV exporty z dashbordu pro porovnání přesnosti pohybu
+ - **Screenshots** - Snímky z RViz vizualizace pro potvrzení shody modelu s realitou.
 
+<div style="page-break-after: always;"></div>
+
+
+<div align="center">
+  <hr>
+</div>
 
 ## 1.5. Prototype
+
+<div align="center">
+  <hr>
+</div>

@@ -280,8 +280,8 @@ with left_col:
                 st.session_state.active_task = None
 
     if robot.trajectory:
-        total_steps = len(robot.trajectory)
-        done_steps = robot.current_trajectory_step
+        total_steps = max(len(robot.trajectory) - 1, 1)
+        done_steps = min(robot.current_trajectory_step, total_steps)
         remaining_steps = max(total_steps - done_steps, 0)
 
         st.caption(

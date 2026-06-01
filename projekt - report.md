@@ -12,13 +12,21 @@ Vedoucí předmětu: Ing. Pavel Steinbauer, Ph.D. a Ing. Jan Pelikán, Ph.D.
   <hr>
 </div>
 
+<div align="center">
+  <hr>
+</div>
+
 
 ## 1.1.Vision and Scope
 
 <div align="center">
   <hr>
 </div>
+<div align="center">
+  <hr>
+</div>
 
+### Vision
 ### Vision
 
 <div align="justify">
@@ -28,14 +36,17 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 
 <div align="center">
   <img src="images/img_1.3.png" alt="Robotický manipulátor" width="230">
+  <img src="images/img_1.3.png" alt="Robotický manipulátor" width="230">
   <br>
   <i>obr. 1.1 - Robotický manipulátor</i>
 </div>
 
 <br>
+<br>
 
 
 <div align="center">
+  <img src="images/img_1.2.png" alt="CAD model robotického manipulátoru" width="520">
   <img src="images/img_1.2.png" alt="CAD model robotického manipulátoru" width="520">
   <br>
   <i>obr. 1.2 - CAD model robotického manipulátoru</i>
@@ -67,6 +78,8 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 
 ### Plán ověření
 "Úspěchem nazveme stav, kdy dojde k autonomnímu vykonání 30 cycklů bez chyby úchopu a v případě otevření klece dojde k zastavení manipulátoru do 500 ms."
+
+<div style="page-break-after: always;"></div>
 
 <div style="page-break-after: always;"></div>
 
@@ -109,6 +122,9 @@ Technické i legislativní omezení:
 
 <div align="center">
 
+
+<div align="center">
+
 | Fáze projektu | Odpovědná role | Výstup (Artefakt) |
 | :--- | :--- | :--- |
 | **Analýza a vize** | Systémový architekt | Vision & Scope dokumentace, C4 diagram |
@@ -122,12 +138,24 @@ Technické i legislativní omezení:
 </div>
 
 <br>
+<br>
+<i>tab. 1.1 - Rozdělení rolí v týmu</i>
+</div>
 
+<br>
+
+<div align="center">
+  <hr>
+</div>
 <div align="center">
   <hr>
 </div>
 
 ## 1.2. Requirements Specification
+
+<div align="center">
+  <hr>
+</div>
 
 <div align="center">
   <hr>
@@ -210,11 +238,20 @@ Model se zaměřuje na elementární (atomické) operace systému, ze kterých s
 #### Akceptační kritéria rozhraní
 
 <div align = "center">
+#### Akceptační kritéria rozhraní
+
+<div align = "center">
 
 ||Detekce neúspěšného úchopu - navázáno na FR-03|
 | :--- | :--- | 
 | **Given** | Robot se nachází na zásobníkem a spustil uchopovací cyklus
 | **When** | Koncový senzor nahlásí zmáčknutí koncového spínače indikující chybějící polotovar
+| **Then** | Robot přeruší cyklus, zvedne osu Z do bezpečné výšky a aktivuje alarm |
+
+<br>
+<i>tab. 1.3 - Akceptační kritéria rozhraní pro FR-03 </i>
+<br>
+<br>
 | **Then** | Robot přeruší cyklus, zvedne osu Z do bezpečné výšky a aktivuje alarm |
 
 <br>
@@ -227,7 +264,12 @@ Model se zaměřuje na elementární (atomické) operace systému, ze kterých s
 | **Given** | Robot provádí pohyb v libovolné ose
 | **When** | Dojde k rozpojení bezpečnostního okruhu (tlačítko, otevření klece)
 | **Then** | Systém odpojí pohony a veškerý pohyb se zastaví do 500 ms |
+| **Then** | Systém odpojí pohony a veškerý pohyb se zastaví do 500 ms |
 
+<br>
+<i>tab. 1.4 - Akceptační kritéria rozhraní - pro NRF-01 </i>
+</div>
+<br>
 
 
 <br>
@@ -246,6 +288,10 @@ Model se zaměřuje na elementární (atomické) operace systému, ze kterých s
   <hr>
 </div>
 
+<div align="center">
+  <hr>
+</div>
+
 Specifikujeme vnitřní strukturu a dynamické chování řídícího systému pro Gantry robot. Modely definují rozhraní mezi jednotlivámi softwarowými moduly a jejich interakci s okolím.
 
 **Doménový model**
@@ -259,12 +305,15 @@ Doménovým modelem reprezentujeme vztahy mezi klíčovými objekty v problémov
 </div>
 
 <div style="page-break-after: always;"></div>
+<div style="page-break-after: always;"></div>
 
 **Dynamický model: Stavový automat**
 
 Stavový automat definuje deterministické chování robota. Zajišťuje, že systém reaguje na podněty pouze v logických stavech.
 
 Klíčovým prvkem je stav Fault, do kterého systém přechází při jakékoli anomálii. Dále systémové chování popisují přechody mezi pracovními stavy, kde každý přechod je hlídán logickou podmínkou.
+
+<br>
 
 <br>
 
@@ -279,7 +328,12 @@ Klíčovým prvkem je stav Fault, do kterého systém přechází při jakékoli
 <div style="page-break-after: always;"></div>
 
 
+
+<div style="page-break-after: always;"></div>
+
+
 **Procesní model - Data Flow Diagram**
+Vytvořen pro klíčový  proces - Úchop polotovaru
 Vytvořen pro klíčový  proces - Úchop polotovaru
 
 <div align="center">
@@ -287,6 +341,9 @@ Vytvořen pro klíčový  proces - Úchop polotovaru
   <br>
   <i>obr. 1.7 - Data Flow Diagram </i>
 </div>
+
+<div style="page-break-after: always;"></div>
+
 
 <div style="page-break-after: always;"></div>
 
@@ -307,8 +364,18 @@ Model popisující fyzické a logické rozmístění softwarových komponent na 
 <div align="center">
   <hr>
 </div>
+<div style="page-break-after: always;"></div>
+
+
+<div align="center">
+  <hr>
+</div>
 
 ## 1.4. Verification and Validation
+
+<div align="center">
+  <hr>
+</div>
 
 <div align="center">
   <hr>
@@ -317,6 +384,8 @@ Model popisující fyzické a logické rozmístění softwarových komponent na 
 **V&V Matice - Traceability**
 
 Pro vybrané požadavky z kapitoly 1.2
+
+<div align="center" >
 
 <div align="center" >
 
@@ -331,13 +400,19 @@ FR-02 | Přesnost pohybu | Měření | Najetí na 3 náhodné body v 5 opakován
 
 <i>tab. 1.5 - V&V Matice - Traceability</i>
 </div>
+|NFR-02|   Uptime 95 % | Test | 24hodinový běh v simulovaném stress-test cyklu |  TC-06
+
+<i>tab. 1.5 - V&V Matice - Traceability</i>
+</div>
 
 <br>
 
 **Testovací strategie po úrovních**
 
 Pro omezení fyzických škod způsobené chybami softwaru, přistoupíme k testingu pomocí víceúrovňové simulace, ve které postupně zvyšujeme množinu celku zapojení robota.
+Pro omezení fyzických škod způsobené chybami softwaru, přistoupíme k testingu pomocí víceúrovňové simulace, ve které postupně zvyšujeme množinu celku zapojení robota.
 
+1. **Unit Testing** - Testování jednotlivých funkcí (výpočet inverzní kinematiky, parsování ROS2 zpráv) bez nutnosti připojeného HW
 1. **Unit Testing** - Testování jednotlivých funkcí (výpočet inverzní kinematiky, parsování ROS2 zpráv) bez nutnosti připojeného HW
    
 2. **Software in the Loop** - Testování kompletního kódu v simulovaném prostředí (například Gazebo), kde pozorujeme chování robota ve virtuálním prostředí.
@@ -345,11 +420,19 @@ Pro omezení fyzických škod způsobené chybami softwaru, přistoupíme k test
 4. **System Inert Fluid Testing** - První testování stroje v prostředí lázní plněné inertní kapalinou (vodou)
 5. **System Stress Testing** - Vědomé přetězování softwarové logiky v bezpečném prostředí (bez chemie) 
 6. **System Endtesting**  - Finální testování kompletního stroje v chemickém provozu 
+2. **Software in the Loop** - Testování kompletního kódu v simulovaném prostředí (například Gazebo), kde pozorujeme chování robota ve virtuálním prostředí.
+3. **Hardware in the Loop** - Řídící algoritmus běží na Master PC, ale je připojem k realným driverům motorů bez mechanické zátěže pro otestování komunikace.
+4. **System Inert Fluid Testing** - První testování stroje v prostředí lázní plněné inertní kapalinou (vodou)
+5. **System Stress Testing** - Vědomé přetězování softwarové logiky v bezpečném prostředí (bez chemie) 
+6. **System Endtesting**  - Finální testování kompletního stroje v chemickém provozu 
 
+<div style="page-break-after: always;"></div>
 <div style="page-break-after: always;"></div>
 
 **Test cases**
+**Test cases**
 
+<div align="center">
 <div align="center">
 
 | ID | Název testu | Vstupní podmínka | Očekávaný výsledek | Pass/Fail kritérium |
@@ -361,8 +444,19 @@ Pro omezení fyzických škod způsobené chybami softwaru, přistoupíme k test
 |TC-04| **Soft Limit Breach** | Pokus o pohyb na "přeslimitní" souřadnice| Software odmítne vykonat pohyb dřív, než se motory pohnou| Chybová hláška v konzoli|
 |TC-05| **Emergency Stop**| Stisk E-stop tlačítka během pohybu | Okamžité zastavení všech os do 500 ms| Časový rozdíl v logu t<500 ms |
 |TC-06| **24 hod - Zátěžový Test**| Skript s nekonečnou frontou náhodných, validních souřadnic v pracovním prostoru | Systém vykoná cykly bez pádu uzlů nebo kritického nárustu spotřeby | Systém běží minimálně 95 % testovaného času bez nutnosti restartu softwaru v simulovaném prostředí - SIF |
+|TC-01 | **Homing Sequence** | 10x - Start systému, osy v náhodných polohách | Robot najde 3 koncové spínače a vynuluje souřadnice | isHomed == True a rozptyl nalezených nulových bodů <0,05 mm| 
+|TC-02 | **P2P Accuracy** | 5x - Příkaz pohybu na bod1, bod2, bod3  | Robot se zastaví na pozici | Max. odchylka mezi cílovou a skutečnou polohou v každém kroku <0.1 mm|
+|TC-03a| **Pick Succes** | Polotovar v zásobníku, příkaz Pick | Koncový senzor sepne a změní stav na Gripped | is_gripped = True |
+|TC-03b| **Pic Failure (empty)** | Zásobník prázdný, příkaz Pick | Po 2s timeoutu, systém nahlásí chybu a přejede do bezpečné polohy | Stav - Fault, zprává ROS2 operátorovi |
+|TC-04| **Soft Limit Breach** | Pokus o pohyb na "přeslimitní" souřadnice| Software odmítne vykonat pohyb dřív, než se motory pohnou| Chybová hláška v konzoli|
+|TC-05| **Emergency Stop**| Stisk E-stop tlačítka během pohybu | Okamžité zastavení všech os do 500 ms| Časový rozdíl v logu t<500 ms |
+|TC-06| **24 hod - Zátěžový Test**| Skript s nekonečnou frontou náhodných, validních souřadnic v pracovním prostoru | Systém vykoná cykly bez pádu uzlů nebo kritického nárustu spotřeby | Systém běží minimálně 95 % testovaného času bez nutnosti restartu softwaru v simulovaném prostředí - SIF |
 
 
+<br>
+<i>tab. 1.6 - Tabulka Test Cases </i>
+</div>
+<br>
 <br>
 <i>tab. 1.6 - Tabulka Test Cases </i>
 </div>
@@ -377,7 +471,17 @@ Pro splnění požadavků na evidenci, použijeme tyto nástroje:
  - **System Logs** - Textové záznamy o stavových přechodech
  - **Telemetry values** - CSV exporty z dashbordu pro porovnání přesnosti pohybu
  - **Screenshots** - Snímky z RViz vizualizace pro potvrzení shody modelu s realitou.
+ - **ROS Bags** - Záznam všech dat protékajících systémem (témata, zprávy, časy)
+ - **System Logs** - Textové záznamy o stavových přechodech
+ - **Telemetry values** - CSV exporty z dashbordu pro porovnání přesnosti pohybu
+ - **Screenshots** - Snímky z RViz vizualizace pro potvrzení shody modelu s realitou.
 
+<div style="page-break-after: always;"></div>
+
+
+<div align="center">
+  <hr>
+</div>
 <div style="page-break-after: always;"></div>
 
 
@@ -387,6 +491,9 @@ Pro splnění požadavků na evidenci, použijeme tyto nástroje:
 
 ## 1.5. Prototype
 
+<div align="center">
+  <hr>
+</div>
 <div align="center">
   <hr>
 </div>

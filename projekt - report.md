@@ -140,22 +140,23 @@ Model se zaměřuje na elementární (atomické) operace systému, ze kterých s
 
 **Seznam elementárních případů užití:**
 
-  - **UC_01**: Inicializace (Homing) – kalibrace os
+  - **UC_01**: Inicializace a homing – uvedení systému do výchozího stavu, kalibrace os a určení referenční polohy robota.
 
-- **UC_02**: Pohyb na souřadnice – nízkoúrovňové řízení trajektorie.
+- **UC_02**: Přenesení desky – hlavní pracovní scénář systému, při kterém robot přesune desku ze zdrojové pozice na cílovou pozici.
 
-- **UC_03**: Úchop polotovaru (Pick) – aktivace a kontrola gripperu
+- **UC_03**: Sledování stavu a telemetrie – průběžné zobrazování stavu robota, aktuální pozice, chybových hlášení a provozních dat.
 
-- **UC_04**: Uvolnění polotovaru (Place) – deaktivace gripperu a potvrzení.
+- **UC_04**: Nouzové zastavení robota – prioritní bezpečnostní zásah, který přeruší pohyb robota a uvede systém do bezpečného stavu.
 
-- **UC_05**: Nouzové zastavení – prioritní přerušení SW smyčky.
+- **UC_05**: Servisní ovládání pohybu – ruční nebo servisní řízení pohybu robota pro účely testování, údržby nebo seřízení.
 
-další operace systému, které už nejsou součástí diagramu:
+-  **UC_06**: Kalibrace systému – nastavení a ověření kalibračních parametrů systému, například rozsahu pohybu, referenčních bodů a přesnosti polohování.
 
--  **UC_06**: Ověření dosažitelnosti souřadnic - ověření správnost zadaných souřadnic v porovnání s pracovním prostorem
+-  **UC_07**: Diagnostika poruchy – zjištění příčiny chybového stavu pomocí stavových informací, telemetrie a logů systému.
 
--  **UC_07**: Odeslání dat do databáze - log informace o průběhu stavů v robotu
+-  **UC_08**: Přijetí pohybového příkazu – příjem požadavku na pohyb z nadřazeného systému nebo ROS2 rozhraní.
 
+-  **UC_09**: Odeslání stavu a telemetrie – předání aktuálních stavových dat, provozních hodnot a diagnostických informací do ROS2 nebo nadřazeného systému.
  
 <div align="center">
   <img src="images/img_1.5.png" alt="Usecase diagram" width="680">
@@ -166,25 +167,29 @@ další operace systému, které už nejsou součástí diagramu:
 
 #### Seznam požadavků (FR & NFR)
 
+
 <div align="center">
 
-| ID | Požadavek | Priorita | Zdroj | Verifikace | Evidence |
-| :--- | :--- | :--- | :--- |:--- | :--- |
-| **FR-01** | Systém musí umožnit automatickou kalibraci všech 3 os (Homing) | Vysoká | Servisní technik | Test | Konzole ROS2 (zpráva)
-| **FR-02** | Pohyb (P2P): Systém musí umožnit přesun TCP na definované souřadnice X, Y, Z s přesností ± 0.1 mm. |Vysoká | Provozní scénář | Demonstrace| Porovnání cílových a aktuálních souřadnic
-| **FR-03** | Systém musí aktivovat a  detekovat úspěšný úchop destičky pomocí koncového senzoru | Vysoká |Provozní scénář| Test | Změna v provozním logu u gripper_status
-| **FR-04** | Systém deaktivuje gripper a potvrdí uvolnění gripperu před odjezdem osy Z | Vysoká |Provozní scénář| Test | Log událostí a následná změna Z souřadnic
-| **FR-05** | Systém musí umožnit posuv os v servisním režimu | Nízka |Servisní technik| Test | Záznam o přijetí příkazu z ovladače (panel)
-| **FR-06** | Systémově implementované softwarově mechanické limity | Vysoká | Bezpečnostní technik | Test | Chybová hláška v terminálu při pohybu mimo rozsah
-| **FR-07** | Ukládání systémových dat o dokončených cyklech, chybových hlášení a stavu senzorů do logu a odesílat přes ROS2 v realtimu | Střední | Záznám výsledků | Analýza logu | soubor .log na disku s historií dat
-| **NFR-01** | Systém musí přejít do bezpečného stop-stavu při detekci poruchy/červeného tlačítka   do 500 ms (Failsafe). | Kritická | Bezpečnostní technik | Měření | Časový rozdíl v logu mezi chybou a zastavením motoru
-| **NFR-02** | Provozuschopnost systému víc než 95 % plánované výrobní doby  | Vysoká | Koordnitánor výroby | Analýza logu |Report z diagnostického modulu
-| **NFR-03** | Síťová komunikace ROS2 izolována od veřejné sítě a ochráněna od neoprávných příkazů | Vysoká | Vývojář | Inspekce sítě | Konfigurační soubor firewallu
+| ID         | Use case ID                    | Požadavek                                                                                                                 | Priorita | Zdroj                | Verifikace    | Evidence                                             |
+| :--------- | :----------------------------- | :------------------------------------------------------------------------------------------------------------------------ | :------- | :------------------- | :------------ | :--------------------------------------------------- |
+| **FR-01**  | **UC_01, UC_06**               | Systém musí umožnit automatickou kalibraci všech 3 os (Homing)                                                            | Vysoká   | Servisní technik     | Test          | Konzole ROS2 (zpráva)                                |
+| **FR-02**  | **UC_10, UC_02**               | Pohyb (P2P): Systém musí umožnit přesun TCP na definované souřadnice X, Y, Z s přesností ± 0.1 mm.                        | Vysoká   | Provozní scénář      | Demonstrace   | Porovnání cílových a aktuálních souřadnic            |
+| **FR-03**  | **UC_12, UC_02**               | Systém musí aktivovat a detekovat úspěšný úchop destičky pomocí koncového senzoru                                         | Vysoká   | Provozní scénář      | Test          | Změna v provozním logu u gripper_status              |
+| **FR-04**  | **UC_13, UC_02**               | Systém deaktivuje gripper a potvrdí uvolnění gripperu před odjezdem osy Z                                                 | Vysoká   | Provozní scénář      | Test          | Log událostí a následná změna Z souřadnic            |
+| **FR-05**  | **UC_05**                      | Systém musí umožnit posuv os v servisním režimu                                                                           | Nízká    | Servisní technik     | Test          | Záznam o přijetí příkazu z ovladače (panel)          |
+| **FR-06**  | **UC_11, UC_16, UC_10**        | Systém musí softwarově kontrolovat mechanické limity pracovního prostoru a odmítnout pohyb mimo povolený rozsah.          | Vysoká   | Bezpečnostní technik | Test          | Chybová hláška v terminálu při pohybu mimo rozsah    |
+| **FR-07**  | **UC_03, UC_09, UC_14**        | Ukládání systémových dat o dokončených cyklech, chybových hlášení a stavu senzorů do logu a odesílat přes ROS2 v realtimu | Střední  | Záznám výsledků      | Analýza logu  | soubor .log na disku s historií dat                  |
+| **NFR-01** | **UC_04, UC_17**               | Systém musí přejít do bezpečného stop-stavu při detekci poruchy/červeného tlačítka do 500 ms (Failsafe).                  | Kritická | Bezpečnostní technik | Měření        | Časový rozdíl v logu mezi chybou a zastavením motoru |
+| **NFR-02** | **UC_02, UC_03, UC_07, UC_14** | Provozuschopnost systému víc než 95 % plánované výrobní doby za období jednoho týdně                                      | Vysoká   | Koordnitánor výroby  | Analýza logu  | Report z diagnostického modulu                       |
+| **NFR-03** | **UC_08, UC_09**               | Síťová komunikace ROS2 izolována od veřejné sítě a ochráněna od neoprávných příkazů                                       | Vysoká   | Vývojář              | Inspekce sítě | Konfigurační soubor firewallu                        |
 
 <br>
 <i>tab. 1.2 - Tabulka se seznamem požadavků (FR & NFR)</i>
 </div>
 <br>
+
+
+
 
 
 **Požadavky na rozhraní**
@@ -222,6 +227,8 @@ další operace systému, které už nejsou součástí diagramu:
 | **Given** | Robot provádí pohyb v libovolné ose
 | **When** | Dojde k rozpojení bezpečnostního okruhu (tlačítko, otevření klece)
 | **Then** | Systém odpojí pohony a veškerý pohyb se zastaví do 500 ms |
+
+
 
 <br>
 <i>tab. 1.4 - Akceptační kritéria rozhraní - pro NRF-01 </i>

@@ -12,9 +12,7 @@ Vedoucí předmětu: Ing. Pavel Steinbauer, Ph.D. a Ing. Jan Pelikán, Ph.D.
   <hr>
 </div>
 
-<div align="center">
-  <hr>
-</div>
+
 
 
 ## 1.1.Vision and Scope
@@ -22,9 +20,7 @@ Vedoucí předmětu: Ing. Pavel Steinbauer, Ph.D. a Ing. Jan Pelikán, Ph.D.
 <div align="center">
   <hr>
 </div>
-<div align="center">
-  <hr>
-</div>
+
 
 ### Vision
 ### Vision
@@ -144,9 +140,7 @@ Technické i legislativní omezení:
 
 <br>
 
-<div align="center">
-  <hr>
-</div>
+
 <div align="center">
   <hr>
 </div>
@@ -157,9 +151,7 @@ Technické i legislativní omezení:
   <hr>
 </div>
 
-<div align="center">
-  <hr>
-</div>
+
 
 Cílem je definování systému tak, aby byl jednoznačný, testovatelný a zaměřený na softwarové řízení 3-osého manipulátoru.
 
@@ -288,9 +280,7 @@ Model se zaměřuje na elementární (atomické) operace systému, ze kterých s
   <hr>
 </div>
 
-<div align="center">
-  <hr>
-</div>
+
 
 Specifikujeme vnitřní strukturu a dynamické chování řídícího systému pro Gantry robot. Modely definují rozhraní mezi jednotlivámi softwarowými moduly a jejich interakci s okolím.
 
@@ -377,9 +367,7 @@ Model popisující fyzické a logické rozmístění softwarových komponent na 
   <hr>
 </div>
 
-<div align="center">
-  <hr>
-</div>
+
 
 **V&V Matice - Traceability**
 
@@ -413,18 +401,18 @@ Pro omezení fyzických škod způsobené chybami softwaru, přistoupíme k test
 Pro omezení fyzických škod způsobené chybami softwaru, přistoupíme k testingu pomocí víceúrovňové simulace, ve které postupně zvyšujeme množinu celku zapojení robota.
 
 1. **Unit Testing** - Testování jednotlivých funkcí (výpočet inverzní kinematiky, parsování ROS2 zpráv) bez nutnosti připojeného HW
-1. **Unit Testing** - Testování jednotlivých funkcí (výpočet inverzní kinematiky, parsování ROS2 zpráv) bez nutnosti připojeného HW
+2. **Unit Testing** - Testování jednotlivých funkcí (výpočet inverzní kinematiky, parsování ROS2 zpráv) bez nutnosti připojeného HW
    
-2. **Software in the Loop** - Testování kompletního kódu v simulovaném prostředí (například Gazebo), kde pozorujeme chování robota ve virtuálním prostředí.
-3. **Hardware in the Loop** - Řídící algoritmus běží na Master PC, ale je připojem k realným driverům motorů bez mechanické zátěže pro otestování komunikace.
-4. **System Inert Fluid Testing** - První testování stroje v prostředí lázní plněné inertní kapalinou (vodou)
-5. **System Stress Testing** - Vědomé přetězování softwarové logiky v bezpečném prostředí (bez chemie) 
-6. **System Endtesting**  - Finální testování kompletního stroje v chemickém provozu 
-2. **Software in the Loop** - Testování kompletního kódu v simulovaném prostředí (například Gazebo), kde pozorujeme chování robota ve virtuálním prostředí.
-3. **Hardware in the Loop** - Řídící algoritmus běží na Master PC, ale je připojem k realným driverům motorů bez mechanické zátěže pro otestování komunikace.
-4. **System Inert Fluid Testing** - První testování stroje v prostředí lázní plněné inertní kapalinou (vodou)
-5. **System Stress Testing** - Vědomé přetězování softwarové logiky v bezpečném prostředí (bez chemie) 
-6. **System Endtesting**  - Finální testování kompletního stroje v chemickém provozu 
+3. **Software in the Loop** - Testování kompletního kódu v simulovaném prostředí (například Gazebo), kde pozorujeme chování robota ve virtuálním prostředí.
+4. **Hardware in the Loop** - Řídící algoritmus běží na Master PC, ale je připojem k realným driverům motorů bez mechanické zátěže pro otestování komunikace.
+5. **System Inert Fluid Testing** - První testování stroje v prostředí lázní plněné inertní kapalinou (vodou)
+6. **System Stress Testing** - Vědomé přetězování softwarové logiky v bezpečném prostředí (bez chemie) 
+7. **System Endtesting**  - Finální testování kompletního stroje v chemickém provozu 
+8. **Software in the Loop** - Testování kompletního kódu v simulovaném prostředí (například Gazebo), kde pozorujeme chování robota ve virtuálním prostředí.
+9. **Hardware in the Loop** - Řídící algoritmus běží na Master PC, ale je připojem k realným driverům motorů bez mechanické zátěže pro otestování komunikace.
+10. **System Inert Fluid Testing** - První testování stroje v prostředí lázní plněné inertní kapalinou (vodou)
+11. **System Stress Testing** - Vědomé přetězování softwarové logiky v bezpečném prostředí (bez chemie) 
+12. **System Endtesting**  - Finální testování kompletního stroje v chemickém provozu 
 
 <div style="page-break-after: always;"></div>
 <div style="page-break-after: always;"></div>
@@ -480,7 +468,7 @@ Pro splnění požadavků na evidenci, použijeme tyto nástroje:
 
 
 <div align="center">
-  <hr>
+  
 </div>
 <div style="page-break-after: always;"></div>
 
@@ -492,8 +480,19 @@ Pro splnění požadavků na evidenci, použijeme tyto nástroje:
 ## 1.5. Prototype
 
 <div align="center">
-  <hr>
 </div>
 <div align="center">
   <hr>
+</div>
+
+V naprogramovaném prototypu je ukázán základní demonstrátor řídící logiky 3 osého gantry manipulátoru. Aplikace umožňuje inicializaci systému, provedení homingu, zadání cílové polohy TCP v osách X, Y, Z a postupné krokování pohybu po plánované trajektorii. Součástí je také kontrola pracovního prostoru, stavový model robota, nouzové zastavení, reset poruchového stavu a průběžný záznam událostí do logu.
+
+Prototyp také simuluje základní pick and place scénář. Uživatel může nastavit přítomnost destičky v zásobníku, spustit sekvenci uchopení nebo položení a sledovat stav gripperu, uchopení destičky a aktuální polohu TCP. Vizualizace v aplikaci zobrazuje pracovní prostor manipulátoru, aktuální pozici, cílovou pozici, plánovanou i vykonanou trajektorii. 
+
+Cílem simulace je ověření, že specifikované stavy, požadavky a chybové scénáře dávají smysl a jsou testovatelné.
+
+<div align="center">
+  <img src="images/img_1.10.png" alt="Prototyp stavového automatu Gantry robotu" width="700">
+  <br>
+  <i>obr. 1.9 - Prototyp stavového automatu Gantry robotu</i>
 </div>

@@ -1,5 +1,6 @@
 # gantry_robot.py
 
+import random
 from datetime import datetime
 from enum import Enum
 
@@ -22,18 +23,46 @@ class GantryRobot:
         self.y_min, self.y_max = 0, 300
         self.z_min, self.z_max = 0, 200
 
-        # TCP position
-        self.x = None
-        self.y = None
-        self.z = None
+        # Pose
+        self.x_coord = None
+        self.y_coord = None
+        self.z_coord = None
 
-        # Robot state
-        self.state = RobotState.POWER_OFF
+        # Gantry_Robot
+        self.status = RobotState.POWER_OFF
+        self.is_initialized = False
         self.is_homed = False
+
+        # Gripper
+        self.is_gripped = False
+        self.is_gripping_active = False
+
+        # Koncovy senzor
+        self.sensor_state = False
 
         # Motion planning
         self.trajectory = []
         self.current_trajectory_step = 0
+
+        # Pick/place task flags
+        self.pending_pick_check = False
+        self.pending_place_release = False
+        self.planned_plate_available = False
+
+        self.pick_positions = [
+            (80, 80),
+            (80, 220),
+        ]
+
+        self.place_positions = [
+            (320, 80),
+            (320, 220),
+        ]
+
+        # Z levels [mm]
+        self.safe_z = 80
+        self.pick_z = 40
+        self.place_z = 40
 
         # Event log
         self.logs = []
@@ -41,7 +70,7 @@ class GantryRobot:
 
     def log_event(self, message):
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-        line = f"[{timestamp}] [{self.state.value}] {message}"
+        line = f"[{timestamp}] [{self.status.value}] {message}"
         self.logs.append(line)
         print(line)
 
@@ -50,9 +79,10 @@ class GantryRobot:
         self.current_trajectory_step = 0
 
     def position_text(self):
-        if self.x is None or self.y is None or self.z is None:
+        if self.x_coord is None or self.y_coord is None or self.z_coord is None:
             return "unknown"
-        return f"({self.x:.2f}, {self.y:.2f}, {self.z:.2f})"
+
+        return f"({self.x_coord:.2f}, {self.y_coord:.2f}, {self.z_coord:.2f})"
 
     def is_within_limits(self, x, y, z):
         return (
@@ -61,126 +91,264 @@ class GantryRobot:
             and self.z_min <= z <= self.z_max
         )
 
+    def can_execute_task(self):
+        if self.status == RobotState.ESTOP:
+            self.log_event("Command rejected. Robot is in ESTOP state.")
+            return False
+
+        if self.status == RobotState.FAULT:
+            self.log_event("Command rejected. Robot is in FAULT state.")
+            return False
+
+        if not self.is_homed:
+            self.log_event("Command rejected. Robot is not homed.")
+            return False
+
+        if self.status != RobotState.READY:
+            self.log_event(f"Command rejected. Robot is currently {self.status.value}.")
+            return False
+
+        return True
+
     def power_on(self):
-        if self.state == RobotState.ESTOP:
+        if self.status == RobotState.ESTOP:
             self.log_event("Power on rejected. Robot is in ESTOP state.")
             return False
 
-        self.state = RobotState.READY
+        self.status = RobotState.READY
+        self.is_initialized = True
         self.log_event("Robot powered on. Homing required.")
         return True
 
     def home(self, x=0, y=0, z=0):
-        if self.state == RobotState.ESTOP:
+        if self.status == RobotState.ESTOP:
             self.log_event("Homing rejected. Robot is in ESTOP state.")
             return False
 
         if not self.is_within_limits(x, y, z):
-            self.state = RobotState.FAULT
+            self.status = RobotState.FAULT
             self.log_event(f"Homing rejected. Home position ({x}, {y}, {z}) is out of bounds.")
             return False
 
-        self.state = RobotState.HOMING
+        self.status = RobotState.HOMING
         self.clear_trajectory()
         self.log_event(f"Homing started to ({x}, {y}, {z}).")
 
-        self.x, self.y, self.z = x, y, z
+        self.x_coord = x
+        self.y_coord = y
+        self.z_coord = z
         self.is_homed = True
 
-        self.state = RobotState.READY
+        self.status = RobotState.READY
         self.log_event("Homing completed. Robot is READY.")
         return True
 
-    def move_to(self, x, y, z, steps=20):
-        if self.state == RobotState.ESTOP:
-            self.log_event("Move rejected. Robot is in ESTOP state.")
-            return False
-
-        if self.state == RobotState.FAULT:
-            self.log_event("Move rejected. Robot is in FAULT state.")
-            return False
-
-        if not self.is_homed:
-            self.log_event("Move rejected. Robot is not homed.")
-            return False
-
-        if not self.is_within_limits(x, y, z):
-            self.state = RobotState.FAULT
-            self.clear_trajectory()
-            self.log_event(f"Move rejected. Target ({x}, {y}, {z}) is out of bounds.")
-            return False
-
-        start_x, start_y, start_z = self.x, self.y, self.z
-        steps = max(1, int(steps))
-
+    def plan_trajectory_through_waypoints(self, waypoints, steps_per_segment=10):
         self.clear_trajectory()
 
-        for step in range(1, steps + 1):
-            t = step / steps
-            self.trajectory.append({
-                "step": step,
-                "x": start_x + (x - start_x) * t,
-                "y": start_y + (y - start_y) * t,
-                "z": start_z + (z - start_z) * t,
-            })
+        start_x = self.x_coord
+        start_y = self.y_coord
+        start_z = self.z_coord
 
-        self.state = RobotState.MOVING
+        self.trajectory.append({
+            "step": 0,
+            "x": start_x,
+            "y": start_y,
+            "z": start_z,
+        })
+
+        step_counter = 1
+        steps_per_segment = max(1, int(steps_per_segment))
+
+        for target_x, target_y, target_z in waypoints:
+            if not self.is_within_limits(target_x, target_y, target_z):
+                self.status = RobotState.FAULT
+                self.clear_trajectory()
+                self.log_event(
+                    f"Trajectory rejected. Waypoint "
+                    f"({target_x}, {target_y}, {target_z}) is out of bounds."
+                )
+                return False
+
+            for step in range(1, steps_per_segment + 1):
+                t = step / steps_per_segment
+
+                self.trajectory.append({
+                    "step": step_counter,
+                    "x": start_x + (target_x - start_x) * t,
+                    "y": start_y + (target_y - start_y) * t,
+                    "z": start_z + (target_z - start_z) * t,
+                })
+
+                step_counter += 1
+
+            start_x = target_x
+            start_y = target_y
+            start_z = target_z
+
+        return True
+
+    def move_to(self, x, y, z, steps=20):
+        if not self.can_execute_task():
+            return False
+
+        if not self.plan_trajectory_through_waypoints([(x, y, z)], steps):
+            return False
+
+        self.status = RobotState.MOVING
         self.log_event(f"Move planned to ({x}, {y}, {z}) in {steps} steps.")
         return True
 
+    def pick_plate(self, plate_available=True, steps=1):
+        if not self.can_execute_task():
+            return False
+
+        if self.is_gripped:
+            self.log_event("Pick rejected. Robot is already holding a plate.")
+            return False
+
+        source_x, source_y = random.choice(self.pick_positions)
+
+        waypoints = [
+            (source_x, source_y, self.safe_z),
+            (source_x, source_y, self.pick_z),
+            (source_x, source_y, self.safe_z),
+        ]
+
+        if not self.plan_trajectory_through_waypoints(waypoints, steps):
+            return False
+
+        self.pending_pick_check = True
+        self.planned_plate_available = plate_available
+        self.sensor_state = plate_available
+
+        self.status = RobotState.MOVING
+        self.log_event(
+            f"Pick sequence planned at magazine ({source_x}, {source_y}). "
+            f"Plate present: {plate_available}."
+        )
+        return True
+
+    def place_plate(self, steps=1):
+        if not self.can_execute_task():
+            return False
+
+        if not self.is_gripped:
+            self.log_event("Place rejected. Robot is not holding a plate.")
+            return False
+
+        dest_x, dest_y = random.choice(self.place_positions)
+
+        waypoints = [
+            (dest_x, dest_y, self.safe_z),
+            (dest_x, dest_y, self.place_z),
+            (dest_x, dest_y, self.safe_z),
+        ]
+
+        if not self.plan_trajectory_through_waypoints(waypoints, steps):
+            return False
+
+        self.pending_place_release = True
+
+        self.status = RobotState.MOVING
+        self.log_event(f"Place sequence planned at destination ({dest_x}, {dest_y}).")
+        return True
+
     def step_motion(self):
-        if self.state == RobotState.ESTOP:
+        if self.status == RobotState.ESTOP:
             self.log_event("Motion blocked. Robot is in ESTOP state.")
             return False
 
-        if self.state != RobotState.MOVING:
+        if self.status != RobotState.MOVING:
             return False
 
-        if self.current_trajectory_step >= len(self.trajectory):
+        next_step = self.current_trajectory_step + 1
+
+        if next_step >= len(self.trajectory):
             self.finish_motion()
             return False
 
-        point = self.trajectory[self.current_trajectory_step]
-        self.x, self.y, self.z = point["x"], point["y"], point["z"]
-        self.current_trajectory_step += 1
+        point = self.trajectory[next_step]
 
-        if self.current_trajectory_step >= len(self.trajectory):
+        self.x_coord = point["x"]
+        self.y_coord = point["y"]
+        self.z_coord = point["z"]
+
+        self.current_trajectory_step = next_step
+
+        if self.current_trajectory_step >= len(self.trajectory) - 1:
             self.finish_motion()
 
         return True
 
     def finish_motion(self):
-        self.state = RobotState.READY
-        self.log_event(f"Move completed. TCP position is {self.position_text()}.")
+        self.status = RobotState.READY
+        self.log_event(f"Motion completed. TCP position is {self.position_text()}.")
+
+        if self.pending_pick_check:
+            self.pending_pick_check = False
+
+            if not self.planned_plate_available:
+                self.status = RobotState.FAULT
+                self.is_gripping_active = False
+                self.is_gripped = False
+                self.sensor_state = False
+                self.log_event("Pick failed. Magazine was empty. Robot entered FAULT state.")
+                return
+
+            self.is_gripping_active = True
+            self.is_gripped = True
+            self.sensor_state = True
+            self.log_event("Pick completed. Gripper closed and plate detected.")
+
+        if self.pending_place_release:
+            self.pending_place_release = False
+            self.is_gripping_active = False
+            self.is_gripped = False
+            self.sensor_state = False
+            self.log_event("Place completed. Gripper opened and plate released.")
 
     def emergency_stop(self):
-        self.state = RobotState.ESTOP
+        self.status = RobotState.ESTOP
         self.log_event(f"Emergency stop activated. TCP frozen at {self.position_text()}.")
         return True
 
     def reset_fault(self):
-        if self.state not in [RobotState.FAULT, RobotState.ESTOP]:
+        if self.status not in [RobotState.FAULT, RobotState.ESTOP]:
             self.log_event("Reset ignored. Robot is not in FAULT or ESTOP.")
             return False
 
-        self.state = RobotState.READY
+        self.status = RobotState.READY
         self.is_homed = False
+
+        self.is_gripping_active = False
+        self.is_gripped = False
+        self.sensor_state = False
+
+        self.pending_pick_check = False
+        self.pending_place_release = False
+        self.planned_plate_available = False
+
         self.clear_trajectory()
 
-        self.log_event("Fault/ESTOP reset. Trajectory cleared. Homing required.")
+        self.log_event("Fault/ESTOP reset. Trajectory and gripper state cleared. Homing required.")
         return True
 
     def get_position(self):
         return {
-            "x": self.x,
-            "y": self.y,
-            "z": self.z,
+            "x": self.x_coord,
+            "y": self.y_coord,
+            "z": self.z_coord,
         }
 
     def get_status(self):
         return {
             "name": self.name,
-            "state": self.state.value,
+            "status": self.status.value,
+            "is_initialized": self.is_initialized,
             "is_homed": self.is_homed,
+            "is_gripped": self.is_gripped,
+            "is_gripping_active": self.is_gripping_active,
+            "sensor_state": self.sensor_state,
             "position": self.get_position(),
         }

@@ -369,19 +369,36 @@ code {
 <p>Autor: Jan Matouš</p>
 <p>Předmět: Softwarové inženýrství</p>
 <p>Akademický rok 2025/2026</p>
-<h2 id="vedoucí-předmětu-ing-pavel-steinbauer-phd-a-ing-jan-pelikán-phd">Vedoucí předmětu: Ing. Pavel Steinbauer, Ph.D. a Ing. Jan Pelikán, Ph.D.</h2>
+<p>Vedoucí předmětu: Ing. Pavel Steinbauer, Ph.D. a Ing. Jan Pelikán, Ph.D.</p>
+<div align="center">
+  <hr>
+</div>
+<div align="center">
+  <hr>
+</div>
 <h2 id="11vision-and-scope">1.1.Vision and Scope</h2>
+<div align="center">
+  <hr>
+</div>
+<div align="center">
+  <hr>
+</div>
 <h3 id="vision">Vision</h3>
+<h3 id="vision-1">Vision</h3>
 <div align="justify">
 Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipulátor typu Gantry, který automatizuje manipulaci s výrobním materiálem v prostředí poloautonomní výrobní linky. Systém zajistí nepřetržitost výroby, vysokou opakovatelnost a eliminaci rizika práce s agresivní chemií. 
 </div>
 <div align="center">
-  <img src="images/img_1.3.png" alt="Robotický manipulátor" width="300">
+  <img src="images/img_1.3.png" alt="Robotický manipulátor" width="230">
+  <img src="images/img_1.3.png" alt="Robotický manipulátor" width="230">
   <br>
   <i>obr. 1.1 - Robotický manipulátor</i>
 </div>
+<br>
+<br>
 <div align="center">
-  <img src="images/img_1.2.png" alt="CAD model robotického manipulátoru" width="600">
+  <img src="images/img_1.2.png" alt="CAD model robotického manipulátoru" width="520">
+  <img src="images/img_1.2.png" alt="CAD model robotického manipulátoru" width="520">
   <br>
   <i>obr. 1.2 - CAD model robotického manipulátoru</i>
 </div>
@@ -410,6 +427,8 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 </ol>
 <h3 id="plán-ověření">Plán ověření</h3>
 <p>&quot;Úspěchem nazveme stav, kdy dojde k autonomnímu vykonání 30 cycklů bez chyby úchopu a v případě otevření klece dojde k zastavení manipulátoru do 500 ms.&quot;</p>
+<div style="page-break-after: always;"></div>
+<div style="page-break-after: always;"></div>
 <h3 id="kontextový-diagram">Kontextový diagram</h3>
 <div align="center">
   <img src="images/img_1.4.png" alt="Kontextový diagram" width="680">
@@ -455,6 +474,8 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 </li>
 </ul>
 <h3 id="plán-práce-týmu-a-rozdělení-rolí">Plán práce týmu a rozdělení rolí</h3>
+<div align="center">
+<div align="center">
 <table>
 <thead>
 <tr>
@@ -491,35 +512,58 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 </tr>
 </tbody>
 </table>
+<br>
+<i>tab. 1.1 - Rozdělení rolí v týmu</i>
+</div>
+<br>
+<br>
+<i>tab. 1.1 - Rozdělení rolí v týmu</i>
+</div>
+<br>
+<div align="center">
+  <hr>
+</div>
+<div align="center">
+  <hr>
+</div>
 <h2 id="12-requirements-specification">1.2. Requirements Specification</h2>
+<div align="center">
+  <hr>
+</div>
+<div align="center">
+  <hr>
+</div>
 <p>Cílem je definování systému tak, aby byl jednoznačný, testovatelný a zaměřený na softwarové řízení 3-osého manipulátoru.</p>
 <h3 id="usecase-model">Usecase model</h3>
 <p>Model se zaměřuje na elementární (atomické) operace systému, ze kterých se skládají komplexní procesy.</p>
 <p><strong>Seznam elementárních případů užití:</strong></p>
 <ul>
 <li>
-<p><strong>UC_01</strong>: Inicializace (Homing) – kalibrace os</p>
+<p><strong>UC_01</strong>: Inicializace a homing – uvedení systému do výchozího stavu, kalibrace os a určení referenční polohy robota.</p>
 </li>
 <li>
-<p><strong>UC_02</strong>: Pohyb na souřadnice – nízkoúrovňové řízení trajektorie.</p>
+<p><strong>UC_02</strong>: Přenesení desky – hlavní pracovní scénář systému, při kterém robot přesune desku ze zdrojové pozice na cílovou pozici.</p>
 </li>
 <li>
-<p><strong>UC_03</strong>: Úchop polotovaru (Pick) – aktivace a kontrola gripperu</p>
+<p><strong>UC_03</strong>: Sledování stavu a telemetrie – průběžné zobrazování stavu robota, aktuální pozice, chybových hlášení a provozních dat.</p>
 </li>
 <li>
-<p><strong>UC_04</strong>: Uvolnění polotovaru (Place) – deaktivace gripperu a potvrzení.</p>
+<p><strong>UC_04</strong>: Nouzové zastavení robota – prioritní bezpečnostní zásah, který přeruší pohyb robota a uvede systém do bezpečného stavu.</p>
 </li>
 <li>
-<p><strong>UC_05</strong>: Nouzové zastavení – prioritní přerušení SW smyčky.</p>
-</li>
-</ul>
-<p>další operace systému, které už nejsou součástí diagramu:</p>
-<ul>
-<li>
-<p><strong>UC_06</strong>: Ověření dosažitelnosti souřadnic - ověření správnost zadaných souřadnic v porovnání s pracovním prostorem</p>
+<p><strong>UC_05</strong>: Servisní ovládání pohybu – ruční nebo servisní řízení pohybu robota pro účely testování, údržby nebo seřízení.</p>
 </li>
 <li>
-<p><strong>UC_07</strong>: Odeslání dat do databáze - log informace o průběhu stavů v robotu</p>
+<p><strong>UC_06</strong>: Kalibrace systému – nastavení a ověření kalibračních parametrů systému, například rozsahu pohybu, referenčních bodů a přesnosti polohování.</p>
+</li>
+<li>
+<p><strong>UC_07</strong>: Diagnostika poruchy – zjištění příčiny chybového stavu pomocí stavových informací, telemetrie a logů systému.</p>
+</li>
+<li>
+<p><strong>UC_08</strong>: Přijetí pohybového příkazu – příjem požadavku na pohyb z nadřazeného systému nebo ROS2 rozhraní.</p>
+</li>
+<li>
+<p><strong>UC_09</strong>: Odeslání stavu a telemetrie – předání aktuálních stavových dat, provozních hodnot a diagnostických informací do ROS2 nebo nadřazeného systému.</p>
 </li>
 </ul>
 <div align="center">
@@ -528,10 +572,12 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
   <i>obr. 1.4 - Usecase diagram</i>
 </div>
 <h4 id="seznam-požadavků-fr--nfr">Seznam požadavků (FR &amp; NFR)</h4>
+<div align="center">
 <table>
 <thead>
 <tr>
 <th style="text-align:left">ID</th>
+<th style="text-align:left">Use case ID</th>
 <th style="text-align:left">Požadavek</th>
 <th style="text-align:left">Priorita</th>
 <th style="text-align:left">Zdroj</th>
@@ -542,6 +588,7 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 <tbody>
 <tr>
 <td style="text-align:left"><strong>FR-01</strong></td>
+<td style="text-align:left"><strong>UC_01, UC_06</strong></td>
 <td style="text-align:left">Systém musí umožnit automatickou kalibraci všech 3 os (Homing)</td>
 <td style="text-align:left">Vysoká</td>
 <td style="text-align:left">Servisní technik</td>
@@ -550,7 +597,8 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 </tr>
 <tr>
 <td style="text-align:left"><strong>FR-02</strong></td>
-<td style="text-align:left">Pohyb (P2P): Systém musí umožnit přesun TCP na definované souřadnice X, Y, Z s přesností $\pm$ 0.1 mm.</td>
+<td style="text-align:left"><strong>UC_10, UC_02</strong></td>
+<td style="text-align:left">Pohyb (P2P): Systém musí umožnit přesun TCP na definované souřadnice X, Y, Z s přesností ± 0.1 mm.</td>
 <td style="text-align:left">Vysoká</td>
 <td style="text-align:left">Provozní scénář</td>
 <td style="text-align:left">Demonstrace</td>
@@ -558,7 +606,8 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 </tr>
 <tr>
 <td style="text-align:left"><strong>FR-03</strong></td>
-<td style="text-align:left">Systém musí aktivovat a  detekovat úspěšný úchop destičky pomocí koncového senzoru</td>
+<td style="text-align:left"><strong>UC_12, UC_02</strong></td>
+<td style="text-align:left">Systém musí aktivovat a detekovat úspěšný úchop destičky pomocí koncového senzoru</td>
 <td style="text-align:left">Vysoká</td>
 <td style="text-align:left">Provozní scénář</td>
 <td style="text-align:left">Test</td>
@@ -566,7 +615,8 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 </tr>
 <tr>
 <td style="text-align:left"><strong>FR-04</strong></td>
-<td style="text-align:left">Systém musí deaktivovat gripper a potvrdit uvolnění gripperu před odjezdem osy Z.</td>
+<td style="text-align:left"><strong>UC_13, UC_02</strong></td>
+<td style="text-align:left">Systém deaktivuje gripper a potvrdí uvolnění gripperu před odjezdem osy Z</td>
 <td style="text-align:left">Vysoká</td>
 <td style="text-align:left">Provozní scénář</td>
 <td style="text-align:left">Test</td>
@@ -574,15 +624,17 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 </tr>
 <tr>
 <td style="text-align:left"><strong>FR-05</strong></td>
+<td style="text-align:left"><strong>UC_05</strong></td>
 <td style="text-align:left">Systém musí umožnit posuv os v servisním režimu</td>
-<td style="text-align:left">Nízka</td>
+<td style="text-align:left">Nízká</td>
 <td style="text-align:left">Servisní technik</td>
 <td style="text-align:left">Test</td>
 <td style="text-align:left">Záznam o přijetí příkazu z ovladače (panel)</td>
 </tr>
 <tr>
 <td style="text-align:left"><strong>FR-06</strong></td>
-<td style="text-align:left">Systémově implementované softwarově mechanické limity</td>
+<td style="text-align:left"><strong>UC_11, UC_16, UC_10</strong></td>
+<td style="text-align:left">Systém musí softwarově kontrolovat mechanické limity pracovního prostoru a odmítnout pohyb mimo povolený rozsah.</td>
 <td style="text-align:left">Vysoká</td>
 <td style="text-align:left">Bezpečnostní technik</td>
 <td style="text-align:left">Test</td>
@@ -590,6 +642,7 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 </tr>
 <tr>
 <td style="text-align:left"><strong>FR-07</strong></td>
+<td style="text-align:left"><strong>UC_03, UC_09, UC_14</strong></td>
 <td style="text-align:left">Ukládání systémových dat o dokončených cyklech, chybových hlášení a stavu senzorů do logu a odesílat přes ROS2 v realtimu</td>
 <td style="text-align:left">Střední</td>
 <td style="text-align:left">Záznám výsledků</td>
@@ -598,7 +651,8 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 </tr>
 <tr>
 <td style="text-align:left"><strong>NFR-01</strong></td>
-<td style="text-align:left">Systém musí přejít do bezpečného stop-stavu při detekci poruchy/červeného tlačítka   do 500 ms (Failsafe).</td>
+<td style="text-align:left"><strong>UC_04, UC_17</strong></td>
+<td style="text-align:left">Systém musí přejít do bezpečného stop-stavu při detekci poruchy/červeného tlačítka do 500 ms (Failsafe).</td>
 <td style="text-align:left">Kritická</td>
 <td style="text-align:left">Bezpečnostní technik</td>
 <td style="text-align:left">Měření</td>
@@ -606,7 +660,8 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 </tr>
 <tr>
 <td style="text-align:left"><strong>NFR-02</strong></td>
-<td style="text-align:left">Provozuschopnost systému víc než 95 % plánované výrobní doby</td>
+<td style="text-align:left"><strong>UC_02, UC_03, UC_07, UC_14</strong></td>
+<td style="text-align:left">Provozuschopnost systému víc než 95 % plánované výrobní doby za období jednoho týdně</td>
 <td style="text-align:left">Vysoká</td>
 <td style="text-align:left">Koordnitánor výroby</td>
 <td style="text-align:left">Analýza logu</td>
@@ -614,6 +669,7 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 </tr>
 <tr>
 <td style="text-align:left"><strong>NFR-03</strong></td>
+<td style="text-align:left"><strong>UC_08, UC_09</strong></td>
 <td style="text-align:left">Síťová komunikace ROS2 izolována od veřejné sítě a ochráněna od neoprávných příkazů</td>
 <td style="text-align:left">Vysoká</td>
 <td style="text-align:left">Vývojář</td>
@@ -622,6 +678,10 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 </tr>
 </tbody>
 </table>
+<br>
+<i>tab. 1.2 - Tabulka se seznamem požadavků (FR & NFR)</i>
+</div>
+<br>
 <p><strong>Požadavky na rozhraní</strong></p>
 <ul>
 <li><strong>SW rozhraní</strong> - ROS2 API</li>
@@ -633,7 +693,10 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 <li><strong>Failsafe režim</strong> - při ztrátě komunika s nadřazeným systémem musí robot dokončit pohyb do neutrální polohy nebo okamžitě zastavit</li>
 <li><strong>Emergency STOP</strong> - Fyzické odpojení napájení motorů při narušení klece</li>
 </ul>
-<p><strong>Akceptační kritéria rozhraní</strong></p>
+<h4 id="akceptační-kritéria-rozhraní">Akceptační kritéria rozhraní</h4>
+<div align = "center">
+#### Akceptační kritéria rozhraní
+<div align = "center">
 <table>
 <thead>
 <tr>
@@ -656,6 +719,15 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 </tr>
 </tbody>
 </table>
+<br>
+<i>tab. 1.3 - Akceptační kritéria rozhraní pro FR-03 </i>
+<br>
+<br>
+| **Then** | Robot přeruší cyklus, zvedne osu Z do bezpečné výšky a aktivuje alarm |
+<br>
+<i>tab. 1.3 - Akceptační kritéria rozhraní pro FR-03 </i>
+<br>
+<br>
 <table>
 <thead>
 <tr>
@@ -676,9 +748,30 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 <td style="text-align:left"><strong>Then</strong></td>
 <td style="text-align:left">Systém odpojí pohony a veškerý pohyb se zastaví do 500 ms</td>
 </tr>
+<tr>
+<td style="text-align:left"><strong>Then</strong></td>
+<td style="text-align:left">Systém odpojí pohony a veškerý pohyb se zastaví do 500 ms</td>
+</tr>
 </tbody>
 </table>
+<br>
+<i>tab. 1.4 - Akceptační kritéria rozhraní - pro NRF-01 </i>
+</div>
+<br>
+<br>
+<i>tab. 1.4 - Akceptační kritéria rozhraní - pro NRF-01 </i>
+</div>
+<br>
+<div align="center">
+  <hr>
+</div>
 <h2 id="13-model-system">1.3. Model system</h2>
+<div align="center">
+  <hr>
+</div>
+<div align="center">
+  <hr>
+</div>
 <p>Specifikujeme vnitřní strukturu a dynamické chování řídícího systému pro Gantry robot. Modely definují rozhraní mezi jednotlivámi softwarowými moduly a jejich interakci s okolím.</p>
 <p><strong>Doménový model</strong></p>
 <p>Doménovým modelem reprezentujeme vztahy mezi klíčovými objekty v problémové doméně. Kde systém je rozdělen na logické třídy, vztahy a datové entity.</p>
@@ -687,23 +780,30 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
   <br>
   <i>obr. 1.5 - Doménový model</i>
 </div>
-<br>
+<div style="page-break-after: always;"></div>
+<div style="page-break-after: always;"></div>
 <p><strong>Dynamický model: Stavový automat</strong></p>
 <p>Stavový automat definuje deterministické chování robota. Zajišťuje, že systém reaguje na podněty pouze v logických stavech.</p>
 <p>Klíčovým prvkem je stav Fault, do kterého systém přechází při jakékoli anomálii. Dále systémové chování popisují přechody mezi pracovními stavy, kde každý přechod je hlídán logickou podmínkou.</p>
+<br>
+<br>
 <div align="center">
   <img src="images/img_1.7.png" alt="Doménový model" width="700">
   <br>
   <i>obr. 1.6 - Dynamický model </i>
 </div>
-<br>
+<div style="page-break-after: always;"></div>
+<div style="page-break-after: always;"></div>
 <p><strong>Procesní model - Data Flow Diagram</strong>
-Vytvořen pro klíčová proces - Úchop polotovaru</p>
+Vytvořen pro klíčový  proces - Úchop polotovaru
+Vytvořen pro klíčový  proces - Úchop polotovaru</p>
 <div align="center">
   <img src="images/img_1.8.png" alt="Data Flow Diagram" width="700">
   <br>
   <i>obr. 1.7 - Data Flow Diagram </i>
 </div>
+<div style="page-break-after: always;"></div>
+<div style="page-break-after: always;"></div>
 <p><strong>Model rozhraní a nasazení</strong></p>
 <p>Model popisující fyzické a logické rozmístění softwarových komponent na hadrwarových uzlech. Rozdělení na vnitřní podstruktury systému a vnější entity jako například &quot;Factory Control Server&quot;, se kterým systém komunikuje.</p>
 <div align="center">
@@ -711,9 +811,25 @@ Vytvořen pro klíčová proces - Úchop polotovaru</p>
   <br>
   <i>obr. 1.8 - Model rozhraní a nasazení</i>
 </div>
+<div style="page-break-after: always;"></div>
+<div align="center">
+  <hr>
+</div>
+<div style="page-break-after: always;"></div>
+<div align="center">
+  <hr>
+</div>
 <h2 id="14-verification-and-validation">1.4. Verification and Validation</h2>
+<div align="center">
+  <hr>
+</div>
+<div align="center">
+  <hr>
+</div>
 <p><strong>V&amp;V Matice - Traceability</strong></p>
 <p>Pro vybrané požadavky z kapitoly 1.2</p>
+<div align="center" >
+<div align="center" >
 <table>
 <thead>
 <tr>
@@ -762,37 +878,66 @@ Vytvořen pro klíčová proces - Úchop polotovaru</p>
 </tr>
 <tr>
 <td style="text-align:left">NFR-02</td>
-<td style="text-align:left">Uptime - 95 %</td>
+<td style="text-align:left">Uptime 95 %</td>
 <td style="text-align:left">Test</td>
 <td style="text-align:left">24hodinový běh v simulovaném stress-test cyklu</td>
 <td style="text-align:left">TC-06</td>
 </tr>
 </tbody>
 </table>
+<p><i>tab. 1.5 - V&amp;V Matice - Traceability</i></p>
+</div>
+|NFR-02|   Uptime 95 % | Test | 24hodinový běh v simulovaném stress-test cyklu |  TC-06
+<p><i>tab. 1.5 - V&amp;V Matice - Traceability</i></p>
+</div>
 <br>
 <p><strong>Testovací strategie po úrovních</strong></p>
-<p>Pro omezení škod způsobené neodlaněným spouštěného softwaru přistoupíme k testingu víceúrovňovou simulací, ve které budeme postupně zvyšovat množinu celku robota.</p>
+<p>Pro omezení fyzických škod způsobené chybami softwaru, přistoupíme k testingu pomocí víceúrovňové simulace, ve které postupně zvyšujeme množinu celku zapojení robota.
+Pro omezení fyzických škod způsobené chybami softwaru, přistoupíme k testingu pomocí víceúrovňové simulace, ve které postupně zvyšujeme množinu celku zapojení robota.</p>
 <ol>
 <li>
-<p>Unit Testing - Testování jednotlivých funkcí (výpočet inverzní kinematiky, parsování ROS2 zpráv) bez nutnosti připojeného HW</p>
+<p><strong>Unit Testing</strong> - Testování jednotlivých funkcí (výpočet inverzní kinematiky, parsování ROS2 zpráv) bez nutnosti připojeného HW</p>
 </li>
 <li>
-<p>Software in the Loop - Testování kompletního kódu v simulovaném prostředí (například Gazebo), kde pozorujeme chování robota v bezpečném prostředí.</p>
+<p><strong>Unit Testing</strong> - Testování jednotlivých funkcí (výpočet inverzní kinematiky, parsování ROS2 zpráv) bez nutnosti připojeného HW</p>
 </li>
 <li>
-<p>Hardware in the Loop - Řídící algoritmus běží na Master PC, ale je připojem k realným driverům motorů bez mechanické zátěže pro otestování komunikace.</p>
+<p><strong>Software in the Loop</strong> - Testování kompletního kódu v simulovaném prostředí (například Gazebo), kde pozorujeme chování robota ve virtuálním prostředí.</p>
 </li>
 <li>
-<p>System Inert Fluid Testing - První testování stroje v prostředí lázní plněné inertní kapalinou (vodou)</p>
+<p><strong>Hardware in the Loop</strong> - Řídící algoritmus běží na Master PC, ale je připojem k realným driverům motorů bez mechanické zátěže pro otestování komunikace.</p>
 </li>
 <li>
-<p>System Stress Testing - Vědomé přetězování softwarové logiky v bezpečném prostředí (bez chemie)</p>
+<p><strong>System Inert Fluid Testing</strong> - První testování stroje v prostředí lázní plněné inertní kapalinou (vodou)</p>
 </li>
 <li>
-<p>System Endtesting  - Finální testování kompletního stroje v chemickém provozu</p>
+<p><strong>System Stress Testing</strong> - Vědomé přetězování softwarové logiky v bezpečném prostředí (bez chemie)</p>
+</li>
+<li>
+<p><strong>System Endtesting</strong>  - Finální testování kompletního stroje v chemickém provozu</p>
+</li>
+<li>
+<p><strong>Software in the Loop</strong> - Testování kompletního kódu v simulovaném prostředí (například Gazebo), kde pozorujeme chování robota ve virtuálním prostředí.</p>
+</li>
+<li>
+<p><strong>Hardware in the Loop</strong> - Řídící algoritmus běží na Master PC, ale je připojem k realným driverům motorů bez mechanické zátěže pro otestování komunikace.</p>
+</li>
+<li>
+<p><strong>System Inert Fluid Testing</strong> - První testování stroje v prostředí lázní plněné inertní kapalinou (vodou)</p>
+</li>
+<li>
+<p><strong>System Stress Testing</strong> - Vědomé přetězování softwarové logiky v bezpečném prostředí (bez chemie)</p>
+</li>
+<li>
+<p><strong>System Endtesting</strong>  - Finální testování kompletního stroje v chemickém provozu</p>
 </li>
 </ol>
-<p><strong>Test Cases</strong></p>
+<div style="page-break-after: always;"></div>
+<div style="page-break-after: always;"></div>
+<p><strong>Test cases</strong>
+<strong>Test cases</strong></p>
+<div align="center">
+<div align="center">
 <table>
 <thead>
 <tr>
@@ -806,64 +951,146 @@ Vytvořen pro klíčová proces - Úchop polotovaru</p>
 <tbody>
 <tr>
 <td style="text-align:left">TC-01</td>
-<td style="text-align:left">Homing Sequence</td>
+<td style="text-align:left"><strong>Homing Sequence</strong></td>
 <td style="text-align:left">10x - Start systému, osy v náhodných polohách</td>
 <td style="text-align:left">Robot najde 3 koncové spínače a vynuluje souřadnice</td>
 <td style="text-align:left">isHomed == True a rozptyl nalezených nulových bodů &lt;0,05 mm</td>
 </tr>
 <tr>
 <td style="text-align:left">TC-02</td>
-<td style="text-align:left">P2P Accuracy</td>
+<td style="text-align:left"><strong>P2P Accuracy</strong></td>
 <td style="text-align:left">5x - Příkaz pohybu na bod1, bod2, bod3</td>
 <td style="text-align:left">Robot se zastaví na pozici</td>
 <td style="text-align:left">Max. odchylka mezi cílovou a skutečnou polohou v každém kroku &lt;0.1 mm</td>
 </tr>
 <tr>
 <td style="text-align:left">TC-03a</td>
-<td style="text-align:left">Pick Succes</td>
+<td style="text-align:left"><strong>Pick Succes</strong></td>
 <td style="text-align:left">Polotovar v zásobníku, příkaz Pick</td>
 <td style="text-align:left">Koncový senzor sepne a změní stav na Gripped</td>
-<td style="text-align:left">is_polotovar_uchopen = True</td>
+<td style="text-align:left">is_gripped = True</td>
 </tr>
 <tr>
 <td style="text-align:left">TC-03b</td>
-<td style="text-align:left">Pic Failure (empty)</td>
+<td style="text-align:left"><strong>Pic Failure (empty)</strong></td>
 <td style="text-align:left">Zásobník prázdný, příkaz Pick</td>
-<td style="text-align:left">Po 2s timeoutu, systím nahlásí chybu a přejede do bezpečné polohy</td>
+<td style="text-align:left">Po 2s timeoutu, systém nahlásí chybu a přejede do bezpečné polohy</td>
 <td style="text-align:left">Stav - Fault, zprává ROS2 operátorovi</td>
 </tr>
 <tr>
 <td style="text-align:left">TC-04</td>
-<td style="text-align:left">Soft Limit Breach</td>
+<td style="text-align:left"><strong>Soft Limit Breach</strong></td>
 <td style="text-align:left">Pokus o pohyb na &quot;přeslimitní&quot; souřadnice</td>
 <td style="text-align:left">Software odmítne vykonat pohyb dřív, než se motory pohnou</td>
 <td style="text-align:left">Chybová hláška v konzoli</td>
 </tr>
 <tr>
 <td style="text-align:left">TC-05</td>
-<td style="text-align:left">Emergency Stop</td>
+<td style="text-align:left"><strong>Emergency Stop</strong></td>
 <td style="text-align:left">Stisk E-stop tlačítka během pohybu</td>
 <td style="text-align:left">Okamžité zastavení všech os do 500 ms</td>
 <td style="text-align:left">Časový rozdíl v logu t&lt;500 ms</td>
 </tr>
 <tr>
 <td style="text-align:left">TC-06</td>
-<td style="text-align:left">24 hod - Zátěžový Test</td>
+<td style="text-align:left"><strong>24 hod - Zátěžový Test</strong></td>
+<td style="text-align:left">Skript s nekonečnou frontou náhodných, validních souřadnic v pracovním prostoru</td>
+<td style="text-align:left">Systém vykoná cykly bez pádu uzlů nebo kritického nárustu spotřeby</td>
+<td style="text-align:left">Systém běží minimálně 95 % testovaného času bez nutnosti restartu softwaru v simulovaném prostředí - SIF</td>
+</tr>
+<tr>
+<td style="text-align:left">TC-01</td>
+<td style="text-align:left"><strong>Homing Sequence</strong></td>
+<td style="text-align:left">10x - Start systému, osy v náhodných polohách</td>
+<td style="text-align:left">Robot najde 3 koncové spínače a vynuluje souřadnice</td>
+<td style="text-align:left">isHomed == True a rozptyl nalezených nulových bodů &lt;0,05 mm</td>
+</tr>
+<tr>
+<td style="text-align:left">TC-02</td>
+<td style="text-align:left"><strong>P2P Accuracy</strong></td>
+<td style="text-align:left">5x - Příkaz pohybu na bod1, bod2, bod3</td>
+<td style="text-align:left">Robot se zastaví na pozici</td>
+<td style="text-align:left">Max. odchylka mezi cílovou a skutečnou polohou v každém kroku &lt;0.1 mm</td>
+</tr>
+<tr>
+<td style="text-align:left">TC-03a</td>
+<td style="text-align:left"><strong>Pick Succes</strong></td>
+<td style="text-align:left">Polotovar v zásobníku, příkaz Pick</td>
+<td style="text-align:left">Koncový senzor sepne a změní stav na Gripped</td>
+<td style="text-align:left">is_gripped = True</td>
+</tr>
+<tr>
+<td style="text-align:left">TC-03b</td>
+<td style="text-align:left"><strong>Pic Failure (empty)</strong></td>
+<td style="text-align:left">Zásobník prázdný, příkaz Pick</td>
+<td style="text-align:left">Po 2s timeoutu, systém nahlásí chybu a přejede do bezpečné polohy</td>
+<td style="text-align:left">Stav - Fault, zprává ROS2 operátorovi</td>
+</tr>
+<tr>
+<td style="text-align:left">TC-04</td>
+<td style="text-align:left"><strong>Soft Limit Breach</strong></td>
+<td style="text-align:left">Pokus o pohyb na &quot;přeslimitní&quot; souřadnice</td>
+<td style="text-align:left">Software odmítne vykonat pohyb dřív, než se motory pohnou</td>
+<td style="text-align:left">Chybová hláška v konzoli</td>
+</tr>
+<tr>
+<td style="text-align:left">TC-05</td>
+<td style="text-align:left"><strong>Emergency Stop</strong></td>
+<td style="text-align:left">Stisk E-stop tlačítka během pohybu</td>
+<td style="text-align:left">Okamžité zastavení všech os do 500 ms</td>
+<td style="text-align:left">Časový rozdíl v logu t&lt;500 ms</td>
+</tr>
+<tr>
+<td style="text-align:left">TC-06</td>
+<td style="text-align:left"><strong>24 hod - Zátěžový Test</strong></td>
 <td style="text-align:left">Skript s nekonečnou frontou náhodných, validních souřadnic v pracovním prostoru</td>
 <td style="text-align:left">Systém vykoná cykly bez pádu uzlů nebo kritického nárustu spotřeby</td>
 <td style="text-align:left">Systém běží minimálně 95 % testovaného času bez nutnosti restartu softwaru v simulovaném prostředí - SIF</td>
 </tr>
 </tbody>
 </table>
+<br>
+<i>tab. 1.6 - Tabulka Test Cases </i>
+</div>
+<br>
+<br>
+<i>tab. 1.6 - Tabulka Test Cases </i>
+</div>
+<br>
 <p><strong>Plán záznamu výsledků</strong></p>
 <p>Pro splnění požadavků na evidenci, použijeme tyto nástroje:</p>
 <ul>
-<li>ROS Bags - Záznam všech dat protékajících systémem (témata, zprávy, časy)</li>
-<li>System Logs - Textové záznamy o stavových přechodech</li>
-<li>Telemetry values - CSV exporty z dashbordu pro porovnání přesnosti pohybu</li>
-<li>Screenshots - Snímky z RViz vizualizace pro potvrzení shody modelu s realitou.</li>
+<li><strong>ROS Bags</strong> - Záznam všech dat protékajících systémem (témata, zprávy, časy)</li>
+<li><strong>System Logs</strong> - Textové záznamy o stavových přechodech</li>
+<li><strong>Telemetry values</strong> - CSV exporty z dashbordu pro porovnání přesnosti pohybu</li>
+<li><strong>Screenshots</strong> - Snímky z RViz vizualizace pro potvrzení shody modelu s realitou.</li>
+<li><strong>ROS Bags</strong> - Záznam všech dat protékajících systémem (témata, zprávy, časy)</li>
+<li><strong>System Logs</strong> - Textové záznamy o stavových přechodech</li>
+<li><strong>Telemetry values</strong> - CSV exporty z dashbordu pro porovnání přesnosti pohybu</li>
+<li><strong>Screenshots</strong> - Snímky z RViz vizualizace pro potvrzení shody modelu s realitou.</li>
 </ul>
+<div style="page-break-after: always;"></div>
+<div align="center">
+  <hr>
+</div>
+<div style="page-break-after: always;"></div>
+<div align="center">
+  <hr>
+</div>
 <h2 id="15-prototype">1.5. Prototype</h2>
-
+<div align="center">
+  <hr>
+</div>
+<div align="center">
+  <hr>
+</div>
+<p>V naprogramovaném prototypu je ukázán základní demonstrátor řídící logiky 3 osého gantry manipulátoru. Aplikace umožňuje inicializaci systému, provedení homingu, zadání cílové polohy TCP v osách X, Y, Z a postupné krokování pohybu po plánované trajektorii. Součástí je také kontrola pracovního prostoru, stavový model robota, nouzové zastavení, reset poruchového stavu a průběžný záznam událostí do logu.</p>
+<p>Prototyp také simuluje základní pick and place scénář. Uživatel může nastavit přítomnost destičky v zásobníku, spustit sekvenci uchopení nebo položení a sledovat stav gripperu, uchopení destičky a aktuální polohu TCP. Vizualizace v aplikaci zobrazuje pracovní prostor manipulátoru, aktuální pozici, cílovou pozici, plánovanou i vykonanou trajektorii.</p>
+<p>Cílem simulace je ověření, že specifikované stavy, požadavky a chybové scénáře dávají smysl a jsou testovatelné.</p>
+<div align="center">
+  <img src="images/img_1.10.png" alt="Prototyp stavového automatu Gantry robotu" width="700">
+  <br>
+  <i>obr. 1.9 - Prototyp stavového automatu Gantry robotu</i>
+</div>
 </body>
 </html>

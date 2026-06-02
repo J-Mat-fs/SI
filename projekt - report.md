@@ -23,7 +23,6 @@ Vedoucí předmětu: Ing. Pavel Steinbauer, Ph.D. a Ing. Jan Pelikán, Ph.D.
 
 
 ### Vision
-### Vision
 
 <div align="justify">
 Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipulátor typu Gantry, který automatizuje manipulaci s výrobním materiálem v prostředí poloautonomní výrobní linky. Systém zajistí nepřetržitost výroby, vysokou opakovatelnost a eliminaci rizika práce s agresivní chemií. 
@@ -31,19 +30,16 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 
 
 <div align="center">
-  <img src="images/img_1.3.png" alt="Robotický manipulátor" width="230">
-  <img src="images/img_1.3.png" alt="Robotický manipulátor" width="230">
+  <img src="images/img_1.3.png" alt="Robotický manipulátor" width="220">
   <br>
   <i>obr. 1.1 - Robotický manipulátor</i>
 </div>
 
 <br>
-<br>
 
 
 <div align="center">
-  <img src="images/img_1.2.png" alt="CAD model robotického manipulátoru" width="520">
-  <img src="images/img_1.2.png" alt="CAD model robotického manipulátoru" width="520">
+  <img src="images/img_1.2.png" alt="CAD model robotického manipulátoru" width="510">
   <br>
   <i>obr. 1.2 - CAD model robotického manipulátoru</i>
 </div>
@@ -74,10 +70,9 @@ Cílem projektu je návrh řídícího systému pro 3-osý pick and place manipu
 
 ### Plán ověření
 "Úspěchem nazveme stav, kdy dojde k autonomnímu vykonání 30 cycklů bez chyby úchopu a v případě otevření klece dojde k zastavení manipulátoru do 500 ms."
-
+s
 <div style="page-break-after: always;"></div>
 
-<div style="page-break-after: always;"></div>
 
 ### Kontextový diagram
 <div align="center">
@@ -130,14 +125,10 @@ Technické i legislativní omezení:
 | **Prototypování** | Vývojář | ROS2 simulace, kód klíčové funkce |
 
 <br>
+
+</div>
 <i>tab. 1.1 - Rozdělení rolí v týmu</i>
 </div>
-
-<br>
-<br>
-<i>tab. 1.1 - Rozdělení rolí v týmu</i>
-</div>
-
 <br>
 
 
@@ -212,6 +203,7 @@ Model se zaměřuje na elementární (atomické) operace systému, ze kterých s
 
 
 
+
 **Požadavky na rozhraní**
 
 - **SW rozhraní** - ROS2 API
@@ -230,26 +222,22 @@ Model se zaměřuje na elementární (atomické) operace systému, ze kterých s
 #### Akceptační kritéria rozhraní
 
 <div align = "center">
-#### Akceptační kritéria rozhraní
-
-<div align = "center">
 
 ||Detekce neúspěšného úchopu - navázáno na FR-03|
 | :--- | :--- | 
 | **Given** | Robot se nachází na zásobníkem a spustil uchopovací cyklus
 | **When** | Koncový senzor nahlásí zmáčknutí koncového spínače indikující chybějící polotovar
 | **Then** | Robot přeruší cyklus, zvedne osu Z do bezpečné výšky a aktivuje alarm |
+</div>
 
-<br>
+<div align = "center">
 <i>tab. 1.3 - Akceptační kritéria rozhraní pro FR-03 </i>
 <br>
 <br>
-| **Then** | Robot přeruší cyklus, zvedne osu Z do bezpečné výšky a aktivuje alarm |
+</div>
 
-<br>
-<i>tab. 1.3 - Akceptační kritéria rozhraní pro FR-03 </i>
-<br>
-<br>
+
+<div align = "center">
 
 ||Reakce na nouzové zastavení - navázáno na NRF-01|
 | :--- | :--- | 
@@ -258,16 +246,11 @@ Model se zaměřuje na elementární (atomické) operace systému, ze kterých s
 | **Then** | Systém odpojí pohony a veškerý pohyb se zastaví do 500 ms |
 | **Then** | Systém odpojí pohony a veškerý pohyb se zastaví do 500 ms |
 
-<br>
 <i>tab. 1.4 - Akceptační kritéria rozhraní - pro NRF-01 </i>
 </div>
 <br>
 
-
-<br>
-<i>tab. 1.4 - Akceptační kritéria rozhraní - pro NRF-01 </i>
-</div>
-<br>
+<div style="page-break-after: always;"></div>
 
 
 <div align="center">
@@ -286,7 +269,8 @@ Specifikujeme vnitřní strukturu a dynamické chování řídícího systému p
 
 **Doménový model**
 
-Doménovým modelem reprezentujeme vztahy mezi klíčovými objekty v problémové doméně. Kde systém je rozdělen na logické třídy, vztahy a datové entity.
+Doménový model popisuje hlavní pojmy problémové domény a jejich vzájemné vztahy, nikoliv detailní implementaci programu. V tomto modelu je centrální entitou Gantry Robot, který nese základní stavové informace systému, například status, is_initialized a is_homed. Na robota jsou navázány tři osy typu Osa, které obsahují informace o své identifikaci, cílové a aktuální pozici, limitech a stavu pohybu. Model dále obsahuje třídu Pose, která reprezentuje prostorovou polohu pomocí souřadnic x, y, z, třídu Gripper pro popis stavu uchopovacího mechanismu, Koncový senzor pro informaci o stavu senzoru a Log pro uchování časových záznamů a událostí systému. Vztahy mezi třídami ukazují, že robot je složen z několika os, spolupracuje s gripperem a senzorem, používá cílové polohy a vytváří provozní logy. Model tedy slouží jako přehled klíčových datových objektů, se kterými systém pracuje při řízení pohybu, uchopení desky a diagnostice.
+
 
 <div align="center">
   <img src="images/img_1.6.png" alt="Doménový model" width="730">
@@ -295,14 +279,10 @@ Doménovým modelem reprezentujeme vztahy mezi klíčovými objekty v problémov
 </div>
 
 <div style="page-break-after: always;"></div>
-<div style="page-break-after: always;"></div>
 
 **Dynamický model: Stavový automat**
 
-Stavový automat definuje deterministické chování robota. Zajišťuje, že systém reaguje na podněty pouze v logických stavech.
-
-Klíčovým prvkem je stav Fault, do kterého systém přechází při jakékoli anomálii. Dále systémové chování popisují přechody mezi pracovními stavy, kde každý přechod je hlídán logickou podmínkou.
-
+Stavový automat popisuje dynamické chování gantry robota od zapnutí systému přes inicializaci, připravenost a pracovní cyklus až po poruchový stav. Po spuštění systém přechází ze stavu START / POWER OFF do INIT / HOMING, kde probíhá spuštění homingu. Po nalezení nulové polohy a odeslání stavu do ROS2 přechází robot do stavu READY. Odtud může po validaci souřadnic a výpočtu trajektorie přejít do pohybu, následně do stavů Picking a Placing, které reprezentují uchopení a uložení desky. Přechody jsou popsány pomocí trojice T/P/A, tedy trigger, podmínka a akce, což zpřesňuje, kdy je přechod povolen a co se při něm vykoná. Klíčovým bezpečnostním prvkem je stav Fault, do kterého systém přechází při selhání kalibrace, ztrátě úchopu, mechanickém odporu, bezpečnostní události nebo chybě úchopu. Tento stav zajišťuje zastavení motorů, vypnutí gripperu a upozornění obsluhy, čímž odděluje běžný pracovní cyklus od poruchového chování systému.
 <br>
 
 <br>
@@ -313,18 +293,13 @@ Klíčovým prvkem je stav Fault, do kterého systém přechází při jakékoli
   <i>obr. 1.6 - Dynamický model </i>
 </div>
 
-
-
-<div style="page-break-after: always;"></div>
-
-
-
 <div style="page-break-after: always;"></div>
 
 
 **Procesní model - Data Flow Diagram**
-Vytvořen pro klíčový  proces - Úchop polotovaru
-Vytvořen pro klíčový  proces - Úchop polotovaru
+
+Diagram datových toků popisuje systém jako centrální proces, který komunikuje s okolními terminátory: uživatelem, kamerou, koncovým senzorem a gantry robotem. Kontextová část ukazuje základní vstupy a výstupy systému, zejména datové a řídicí vazby mezi systémem a robotem, kamerou, senzorem a uživatelem. Podrobnější rozpad systému obsahuje dílčí procesy pro vyžádání dat z ROS2 databáze, ověření dosažitelnosti souřadnic, přejetí na zadané souřadnice zásobníku, aktivaci gripperu, přejetí na bezpečnou polohu a odeslání dat o úchopu do databáze. Diagram zároveň znázorňuje, že kamera poskytuje data pro optickou kontrolu, koncový senzor dodává signál o stavu úchopu, uživatel zadává příkazy přes UI a gantry robot vykonává pohybové a manipulační akce.
+
 
 <div align="center">
   <img src="images/img_1.8.png" alt="Data Flow Diagram" width="700">
@@ -332,15 +307,17 @@ Vytvořen pro klíčový  proces - Úchop polotovaru
   <i>obr. 1.7 - Data Flow Diagram </i>
 </div>
 
-<div style="page-break-after: always;"></div>
-
 
 <div style="page-break-after: always;"></div>
 
 
 **Model rozhraní a nasazení**
 
-Model popisující fyzické a logické rozmístění softwarových komponent na hadrwarových uzlech. Rozdělení na vnitřní podstruktury systému a vnější entity jako například "Factory Control Server", se kterým systém komunikuje.
+Model popisující fyzické a logické rozmístění softwarových komponent na hardwarových uzlech. Architektura je dekomponována na vnitřní podstruktury samotného robotického systému a vnější entity, jako například "Factory Control Server", se kterým systém komunikuje.
+
+Vnitřní architektura systému je tvořena dvěma hlavními výpočetními uzly. Master PC slouží jako centrální řídicí jednotka, která zprostředkovává komunikaci s vnějším světem, zajišťuje vizualizaci dat a plánuje úkony na nejvyšší úrovni. Skrze lokální síť (Ethernet) je tento uzel propojen s řídicí jednotkou robota (Robot Control Unit), která funguje jako real-time vykonavatel. Právě zde běží hlavní stavový automat a řídicí logika, která již přímo ovládá koncovou hardwarovou vrstvu stroje – tedy samotné pohony, ventily a senzory.
+
+Toto fyzické i logické oddělení vrstev umožňuje bezpečnou integraci robota do širšího továrního ekosystému. Veškerá komunikace s okolím probíhá výhradně přes Master PC, které přijímá výrobní úlohy z nadřazeného Factory Control Serveru a reportuje aktuální stav vzdálenému uživateli přes zabezpečené síťové rozhraní. Systém zároveň průběžně odesílá provozní data na externí Logging Server, čímž je zajištěna spolehlivá archivace telemetrie, aniž by se zbytečně zatěžoval výpočetní výkon samotného řízení robota.
 
 <div align="center">
   <img src="images/img_1.9.png" alt="Model rozhraní a nasazení" width="700">
@@ -348,18 +325,15 @@ Model popisující fyzické a logické rozmístění softwarových komponent na 
   <i>obr. 1.8 - Model rozhraní a nasazení</i>
 </div>
 
-<div style="page-break-after: always;"></div>
 
+<div style="page-break-after: always;"></div>
 
 <div align="center">
   <hr>
 </div>
-<div style="page-break-after: always;"></div>
 
 
-<div align="center">
-  <hr>
-</div>
+
 
 ## 1.4. Verification and Validation
 
@@ -375,8 +349,6 @@ Pro vybrané požadavky z kapitoly 1.2
 
 <div align="center" >
 
-<div align="center" >
-
 | ID | Požadavek | Metoda ověření | Specifikace ověření | Test Case ID |
 | :--- | :--- | :--- | :--- | :--- |
 |FR-01 | Homing | Zátěžový test | 10x po sobě jdoucí úspěšná kalibrace z náhodných počátečních poloh os | TC-01
@@ -384,10 +356,6 @@ FR-02 | Přesnost pohybu | Měření | Najetí na 3 náhodné body v 5 opakován
 |FR-03| Úchop | Test | 20 cyklů úchopu a zdvihu bez pádu polotovaru nebo falešné detekce uchopení | TC-03
 |FR-06| Soft Limity | Negativní test | 5 pokusů o zadání souřadníc mimo pracovní prostor přes ROS2 | TC-04
 |NFR-01| Stop stav | Časová analýza | 10x simulace chyby, změření času od logu události po zastavení příkazu motorů | TC-05
-|NFR-02|   Uptime 95 % | Test | 24hodinový běh v simulovaném stress-test cyklu |  TC-06
-
-<i>tab. 1.5 - V&V Matice - Traceability</i>
-</div>
 |NFR-02|   Uptime 95 % | Test | 24hodinový běh v simulovaném stress-test cyklu |  TC-06
 
 <i>tab. 1.5 - V&V Matice - Traceability</i>
@@ -414,13 +382,11 @@ Pro omezení fyzických škod způsobené chybami softwaru, přistoupíme k test
 11. **System Stress Testing** - Vědomé přetězování softwarové logiky v bezpečném prostředí (bez chemie) 
 12. **System Endtesting**  - Finální testování kompletního stroje v chemickém provozu 
 
-<div style="page-break-after: always;"></div>
-<div style="page-break-after: always;"></div>
+<br>
+<br>
 
 **Test cases**
-**Test cases**
 
-<div align="center">
 <div align="center">
 
 | ID | Název testu | Vstupní podmínka | Očekávaný výsledek | Pass/Fail kritérium |
@@ -444,10 +410,7 @@ Pro omezení fyzických škod způsobené chybami softwaru, přistoupíme k test
 <br>
 <i>tab. 1.6 - Tabulka Test Cases </i>
 </div>
-<br>
-<br>
-<i>tab. 1.6 - Tabulka Test Cases </i>
-</div>
+
 <br>
 
 
@@ -467,10 +430,7 @@ Pro splnění požadavků na evidenci, použijeme tyto nástroje:
 <div style="page-break-after: always;"></div>
 
 
-<div align="center">
-  
-</div>
-<div style="page-break-after: always;"></div>
+
 
 
 <div align="center">
